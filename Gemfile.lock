@@ -52,7 +52,7 @@ DEPENDENCIES
   nurego!
   rack-test
   rake
-  rspec
+  rspec (~> 2.14.0)
   simplecov
   simplecov-csv
   simplecov-rcov
