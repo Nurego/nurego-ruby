@@ -11,13 +11,16 @@ describe "Entitlements" do
 
     customer = Nurego::Customer.me
     organization = customer.organizations[0]
-    ents = organization.entitlements(nil, organization[:external_id])
+    # TODO(mweaver): Support internal id's in the entitlements API. New
+    # organizations do not have a external id (for good reason).
+    pending('Support for internal org id in the entitlements API')
+    ents = organization.entitlements(nil, organization[:id])
 
-    customers_ent = organization.entitlements('imported_customers')
+    customers_ent = organization.entitlements('subscribers')
 
     feature_id = customers_ent[0][:id]
     max_amount = customers_ent[0][:max_allowed_amount]
-    ent = Nurego::Entitlement.new({id: organization[:external_id]})
+    ent = Nurego::Entitlement.new({id: organization[:id]})
 
     ent.set_usage(feature_id, max_amount - 1)
 
