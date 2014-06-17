@@ -5,7 +5,7 @@ EXAMPLE_EMAIL = "integration.test+#{UUIDTools::UUID.random_create.to_s}@openskym
 EXAMPLE_PASSWORD = "password"
 
 def setup_nurego_lib(no_register = false)
-  Nurego.api_base = ENV['API_BASE'] || "http://localhost:31001/"
+  Nurego.api_base = ENV['API_BASE'] || "http://localhost:31001"
   Nurego.api_key = ENV['NUREGO_API_KEY_TEST'] || 'tee00d77-d6f2-4f8d-8897-26fb89fbeb34'
 
   register unless no_register
