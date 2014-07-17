@@ -10,4 +10,5 @@ export RACK_ENV=test
 gem install --conservative bundler
 bundle install
 
+export COVERAGE_REPORTS=coverage
 bundle exec rake spec:rcov
