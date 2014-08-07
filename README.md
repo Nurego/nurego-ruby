@@ -175,4 +175,4 @@ Nurego<span style="color:#308080; ">.</span>api_key <span style="color:#308080; 
   offering<span style="color: rgb(48, 128, 128);">.</span>plans<span style="color: rgb(48, 128, 128);">.</span><span style="color: rgb(32, 0, 128); font-weight: bold;">each</span> <span style="color: rgb(32, 0, 128); font-weight: bold;">do</span> |plan|
     <span style="color: rgb(64, 0, 0);">puts</span> plan<span style="color: rgb(48, 128, 128);">.</span>inspect
   <span style="color: rgb(32, 0, 128); font-weight: bold;">end</span>
-<span style="color: rgb(32, 0, 128); font-weight: bold;">end</span></pre><h3>Registration</h3><br>﻿<div></div>
+<span style="color: rgb(32, 0, 128); font-weight: bold;">end</span></pre>﻿<div></div>
