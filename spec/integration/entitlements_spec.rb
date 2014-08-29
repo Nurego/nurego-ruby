@@ -7,14 +7,12 @@ describe "Entitlements" do
   end
 
   it "can fetch the entitlement" do
-    # TODO Create a real entitlements here
+    # TODO Create real entitlements here
+    # TODO 2: test using external ids too
 
     customer = Nurego::Customer.me
     organization = customer.organizations[0]
-    # TODO(mweaver): Support internal id's in the entitlements API. New
-    # organizations do not have a external id (for good reason).
-    pending('Support for internal org id in the entitlements API')
-    ents = organization.entitlements(nil, organization[:id])
+    ents = organization.entitlements(nil)
 
     customers_ent = organization.entitlements('subscribers')
 
@@ -22,12 +20,16 @@ describe "Entitlements" do
     max_amount = customers_ent[0][:max_allowed_amount]
     ent = Nurego::Entitlement.new({id: organization[:id]})
 
-    ent.set_usage(feature_id, max_amount - 1)
+    ent.set_usage(feature_id, 6, 'internal')
 
-    allowed = ent.is_allowed(feature_id, 1)
-    puts "#{allowed.inspect}"
+    allowed = ent.is_allowed({ :feature_id => feature_id, :requested_amount => 1 }, 'internal')
+    expect(allowed[0][:is_allowed]).to eq true
+    expect(allowed[0][:current_used_amount]).to eq 6
+    expect(allowed[0][:max_allowed_amount]).to eq max_amount
 
-    allowed = ent.is_allowed(feature_id, 2)
-    puts "#{allowed.inspect}"
+    allowed = ent.is_allowed([{ :feature_id => feature_id, :requested_amount => 1 },
+                              { :feature_id => feature_id, :requested_amount => 2 }],  'internal')
+
+    expect(allowed.length).to eq 2
   end
 end
