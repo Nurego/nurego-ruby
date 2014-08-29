@@ -1,5 +1,3 @@
-require 'rack'
-
 module Nurego
   class Entitlement < APIResource
     include Nurego::APIOperations::List
