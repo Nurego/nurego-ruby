@@ -1,3 +1,3 @@
 module Nurego
-  VERSION = ''
+  VERSION = '1.0.7'
 end
