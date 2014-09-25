@@ -42,4 +42,9 @@ describe "Offerings" do
       end
     end
   end
+
+  it "can fetch my current plan" do
+    plan = Nurego::Offering.my_plan
+    plan["object"].should == "plan"
+  end
 end
