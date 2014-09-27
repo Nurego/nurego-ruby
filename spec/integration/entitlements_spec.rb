@@ -32,4 +32,8 @@ describe "Entitlements" do
 
     expect(allowed.length).to eq 2
   end
+
+  xit "can fetch the entitlement by external id" do
+    customers_ent = Nurego::Organization.entitlements({:customer_id => 'external_id'})
+  end
 end
