@@ -1,33 +1,38 @@
-Overview
+#Overview
 
 
 Nurego-Ruby is simple Ruby bindings library allows easy access to Nurego system, without any hassle of dealing with REST APIs and object mapping. Each object in the system has its own Ruby representation. There are relationships between some of them and they can be traversed using Nurego-Ruby API. The following objects can be used by the customers of Nurego-Ruby:
-Bill
-Connector
-Customer
-Entitlement
-Feature
-Instance
-Offering
-Organization
-Password Reset
-Payment Method
-Plan
-Registration
+
+- Bill
+- Connector
+- Customer
+- Entitlement
+- Feature
+- Instance
+- Offering
+- Organization
+- Password Reset
+- Payment Method
+- Plan
+- Registration
+
 Some of the objects allow simple CRUD (or subset of it), when the others hide more complex operations like password reset. 
 
-Initialization
+#Initialization
 
+```
 require “nurego”
 Nurego.api_key = “l230bc7b-9b85-4c5f-ad9f-4eeeef4d4f44”
+```
 
-Your API key can be obtained from Settings/Organization
-Authorization
+Your API key can be obtained from Settings/Integration
+
+#Authorization
 
 
 Some of the operations require customer login (TBD)
 
-Error handling
+#Error handling
 
 
 Several errors can be thrown by the library. The base class for all Nurego errors is Nurego::NuregoError
@@ -41,135 +46,105 @@ Nurego::UserNotFoundError - user not found
 Nurego::InvalidRequestError - the request to the API endpoint was bad or had wrong arguments
 Nurego::AuthenticationError - bad API key or username/password was provided
 
-Entitlement
-
+#Entitlement
 
 To use an entitlement object you need to obtain customer external ID. In case of Stripe it will be Stripe customer ID (guid starting with cus_
 
 Get entitlement for customer
-﻿﻿begin
+
+```
+begin
   Nurego.api_key = “l230bc7b-9b85-4c5f-ad9f-4eeeef4d4f44”
-
-Nurego.login(username, password)
-
-
-
-customer = Nurego::Customer.me
-  organization = customer.organizations[0]
-  ents = organization.entitlements(nil, customer_id)
+  ents = Nurego::Organization.entitlements({customer_id: 'cus_2shm2PizVL8QOp'})
+  puts ents.inspect
 rescue Nurego::NuregoError => e
   puts “Got exception #{e}”
 end
+```
 
+```
 ﻿[#<Nurego::NuregoObject:0x18b83b8> JSON: {
  "id": "dba33a54-57dc-4a29-abf7-0a83aa7c1961",
  "object": "entitlement",
  "feature_name": "subscribers",
  "max_allowed_amount": 10
 }]
+```
 
-Get entitlements for customer and feature
-﻿begin
+```
+begin
   Nurego.api_key = “l230bc7b-9b85-4c5f-ad9f-4eeeef4d4f44”
-
-Nurego.login(username, password)
-
-
-
-customer = Nurego::Customer.me
-  organization = customer.organizations[0]
-  ents = organization.entitlements(feature_id, customer_id)
+  ents = Nurego::Organization.entitlements({customer_id: 'cus_2shm2PizVL8QOp', feature_id: 'subscribers'})
+  puts ents.inspect
 rescue Nurego::NuregoError => e
   puts “Got exception #{e}”
-
-
-
 end
+```
 
+```
+﻿[#<Nurego::NuregoObject:0x18b83b8> JSON: {
+ "id": "dba33a54-57dc-4a29-abf7-0a83aa7c1961",
+ "object": "entitlement",
+ "feature_name": "subscribers",
+ "max_allowed_amount": 10
+}]
+```
 
 Submit usage for customer
-﻿begin
+
+```
+begin
   Nurego.api_key = “l230bc7b-9b85-4c5f-ad9f-4eeeef4d4f44”
-
-Nurego.login(username, password)
-
-
-
-ent = Nurego::Entitlement.new({id: customer_id})
+  ent = Nurego::Entitlement.new({id: 'cus_2shm2PizVL8QOp'})
   ent.set_usage(feature_id, max_amount - 1)
 rescue Nurego::NuregoError => e
   puts “Got exception #{e}”
 end
-
+```
 
 Check allowed usage for customer
-﻿﻿begin
+
+```
+begin
   Nurego.api_key = “l230bc7b-9b85-4c5f-ad9f-4eeeef4d4f44”
-
-Nurego.login(username, password)
-
-
-
-customer = Nurego::Customer.me
-  organization = customer.organizations[0]
-  ents = organization.entitlements(feature_id, customer_id)
-  ent = ents[0]
-
-
-
-allowed = ent.is_allowed(feature_id, 1)
-  puts "#{allowed.inspect}"
-
-
-
-allowed = ent.is_allowed(feature_id, 2)
-  puts "#{allowed.inspect}"
+  ent = Nurego::Entitlement.new({id: 'cus_2shm2PizVL8QOp'})
+  
+  allowed = ent.is_allowed(feature_id, 1)
+  puts allowed.inspect
+  
+  allowed = ent.is_allowed(feature_id, 2)
+  puts allowed.inspect
 rescue Nurego::NuregoError => e
   puts “Got exception #{e}”
 end
+```
 
-Feature
-
-﻿begin
-  Nurego.api_key = “l230bc7b-9b85-4c5f-ad9f-4eeeef4d4f44”
-  offering = Nurego::Offering.current
-  offering.plans.each do |plan|
-  puts plan.inspect
-  plan.features.each do |feature|
-    puts feature.inspect
-  end
-end
-
-Response will look like this
-﻿#<Nurego::Feature:0x1285518> JSON: {
- "id": "id",
-  "object": "feature",
-  "name": "Funds Service",
-  "element_type": "feature",
-  "price": 0.0,
-  "min_unit": 0,
-  "max_unit": 0,
-  "period": "monthly",
-  "billing_period_interval": 1,
-  "unit_type": {"name":"Funds Service","consumable":false,"apply_repetition":0,"guid":"cd96f327-e1e1-4081-8717-a5baaae4984e"}
-}
-Offering
+#Offering
 
 Retrieve the current offering for the 'All' segment through the 'website' distribution channel.
-﻿begin
+
+```
+begin
   Nurego.api_key = “l230bc7b-9b85-4c5f-ad9f-4eeeef4d4f44”
   offering = Nurego::Offering.current
   puts offering.inspect
 end
+```
 
 To retrieve offerings available for a particular segment and/or distribution channel, add the optional :segment_guid and/or :distribution_channel parameters. To learn more about segments and distribution channels, take a look at the documentation
-﻿begin
+
+```
+begin
   Nurego.api_key = “l230bc7b-9b85-4c5f-ad9f-4eeeef4d4f44”
   offering = Nurego::Offering.current({:segment_guid => '<SEGMENT>', :distribution_channel => '<CHANNEL>'})
   puts offering.inspect
 end
-﻿Response will look like this
-﻿#<Nurego::ListObject:0x1412db8> JSON: {
+```
+
+Response will look like this
+
+```
+#<Nurego::ListObject:0x1412db8> JSON: {
 "data": [
 {
   "id": "ce24d45f-4b33-41d3-a3cb-d46ad411c086",
@@ -257,15 +232,15 @@ end
   "count": 1,
   "url": "/v1/offerings/013ddd26-131d-43f9-95e3-790111a91dad/plans"
 }
+```
 
-Plan
+To retrive the plan object that given customer is subscribed to, the following code should be run
 
-﻿The :distribution_channel and :segment_guid params are optional. Use them to call plans for a specific distribution channel and/or segment. To learn more about creating segments and distribution channels, check out the documentation
-﻿begin
+```
+begin
   Nurego.api_key = “l230bc7b-9b85-4c5f-ad9f-4eeeef4d4f44”
-  offering = Nurego::Offering.current({:segment_guid => '<SEGMENT>', :distribution_channel => '<CHANNEL>'})
-
-offering.plans.each do |plan|
-    puts plan.inspect
-  end
+  plan = Nurego::Offering.my_plan({customer_id: 'cus_2shm2PizVL8QOp'})
+  puts plan.inspect
 end
+```
+
