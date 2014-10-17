@@ -1,3 +1,3 @@
 module Nurego
-  VERSION = '1.1.11'
+  VERSION = IO.read(File.expand_path("../../../VERSION", __FILE__))
 end
