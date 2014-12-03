@@ -35,6 +35,10 @@ module Nurego
         raise NuregoError "fetch_access_info #{e.inspect}"
       end
 
+      def set_header_token(token)
+        @header_token = token
+      end
+      
       private
       def fetch_access_info(username, password)
         token = token_issuer.owner_password_grant(username, password)
