@@ -31,9 +31,7 @@ describe "Entitlements" do
                               { :feature_id => feature_id, :requested_amount => 2 }],  'internal')
 
     expect(allowed.length).to eq 2
-  end
 
-  xit "can fetch the entitlement by external id" do
-    customers_ent = Nurego::Organization.entitlements({:customer_id => 'external_id'})
+    all = Nurego::Entitlement.all({:organization => organization[:id], :provider_name => 'internal' }, Nurego.api_key)
   end
 end
