@@ -23,5 +23,16 @@ module Nurego
       Entitlement.all({:organization => id, :feature_id => feature_id, :provider_name => 'internal' }, @api_key)
     end
 
+    def update_subscription(plan, trial = nil, coupon = nil, external_ids = true)
+      params = {}
+      params[:plan] = plan if plan
+      params[:trial] = trial if trial
+      params[:coupon] = coupon if coupon
+
+      params[:external_ids] = external_ids
+      puts "params is #{params.inspect}"
+      response, api_key = Nurego.request(:put, "/v1/customers/#{id}/subscription", nil, params)
+    end
+
   end
 end

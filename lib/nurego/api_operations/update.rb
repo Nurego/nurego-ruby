@@ -14,17 +14,17 @@ module Nurego
       end
 
 
-      def serialize_params(obj)
+      def serialize_params(obj, force = false)
         case obj
         when nil
           ''
         when NuregoObject
-          unsaved_keys = obj.instance_variable_get(:@unsaved_values)
+          unsaved_keys = force ? obj.instance_variable_get(:@values).keys : obj.instance_variable_get(:@unsaved_values)
           obj_values = obj.instance_variable_get(:@values)
           update_hash = {}
 
           unsaved_keys.each do |k|
-            update_hash[k] = serialize_params(obj_values[k])
+            update_hash[k] = serialize_params(obj_values[k], true)
           end
 
           update_hash

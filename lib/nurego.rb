@@ -34,6 +34,8 @@ require 'nurego/feature'
 require 'nurego/bill'
 require 'nurego/payment_method'
 require 'nurego/entitlement'
+require 'nurego/discount'
+
 
 
 # Errors
@@ -94,6 +96,7 @@ module Nurego
       payload = nil
     else
       payload = uri_encode(params)
+      puts "PAYLOAD IS #{payload.inspect}"
     end
     request_opts.update(:headers => request_headers(api_key).update(headers),
                         :method => method, :open_timeout => 30,
