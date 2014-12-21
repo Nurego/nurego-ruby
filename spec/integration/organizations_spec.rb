@@ -22,7 +22,6 @@ describe "Organizations" do
     organization[:name] = 'new name'
     organization.save
     organization = Nurego::Organization.retrieve(organization[:id])
-    puts "#{organization.inspect}"
   end
 
   it "can retrieve payment method" do
@@ -44,14 +43,17 @@ describe "Organizations" do
     bill["object"].should == "bill" if bill
   end
 
-  # todo: use the same method to update trials and coupons.
+  # todo: use the same method to update coupons and check results
   it "can update organization's subscription" do
     customer = Nurego::Customer.me
     organization = customer.organizations[0]
     organization[:plan] = Nurego::Plan.new(customer[:plan_id])
-    organization[:trial] = Nurego::Discount.new('discount_id')
+    trial = Nurego::Discount.new
+    trial[:trial_days] = 123
+    organization[:trial] = trial
+#    organization[:coupon] = Nurego::Discount.new('discount_id')
+    organization[:external_ids] = false
     organization.save
-#    organization.update_subscription(plan, discount, nil, false)
   end
 
 end
