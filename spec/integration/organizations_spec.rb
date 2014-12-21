@@ -56,4 +56,12 @@ describe "Organizations" do
     organization.save
   end
 
+  it "can fetch the current plan" do
+    customer = Nurego::Customer.me
+    organization = customer.organizations[0]
+
+    plan = organization.plan({:external_ids => false})
+    plan["object"].should == "plan"
+  end
+
 end

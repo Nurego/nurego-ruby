@@ -43,8 +43,4 @@ describe "Offerings" do
     end
   end
 
-  xit "can fetch my current plan" do
-    plan = Nurego::Offering.my_plan({:customer_id => 'cus_4pgBgi7RgqjWX4'})
-    plan["object"].should == "plan"
-  end
 end
