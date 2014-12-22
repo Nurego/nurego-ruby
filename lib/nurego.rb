@@ -34,6 +34,8 @@ require 'nurego/feature'
 require 'nurego/bill'
 require 'nurego/payment_method'
 require 'nurego/entitlement'
+require 'nurego/discount'
+require 'nurego/extensions'
 
 
 # Errors
@@ -165,8 +167,7 @@ module Nurego
   end
 
   def self.uri_encode(params)
-    Util.flatten_params(params).
-      map { |k,v| "#{k}=#{Util.url_encode(v)}" }.join('&')
+    params.to_query
   end
 
   def self.request_headers(api_key)

@@ -10,11 +10,6 @@ module Nurego
       Util.convert_to_nurego_object(response, api_key)
     end
 
-    def self.my_plan(params = {}, api_key = nil)
-      response, api_key = Nurego.request(:get, self.url + '/my', api_key, params)
-      Util.convert_to_nurego_object(response, api_key)
-    end
-
     def plans
       Plan.all({:offering => id }, @api_key)
     end

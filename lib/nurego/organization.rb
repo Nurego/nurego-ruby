@@ -23,5 +23,10 @@ module Nurego
       Entitlement.all({:organization => id, :feature_id => feature_id, :provider_name => 'internal' }, @api_key)
     end
 
+    def plan(params = {}, api_key = nil)
+      response, api_key = Nurego.request(:get, url + '/plan', api_key, params)
+      Util.convert_to_nurego_object(response, api_key)
+    end
+
   end
 end

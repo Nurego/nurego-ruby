@@ -28,6 +28,7 @@ module Nurego
         'feature' => Feature,
         'paymentmethod' => PaymentMethod,
         'bill' => Bill,
+        'discount' => Discount,
         'list' => ListObject
       }
     end
@@ -77,6 +78,7 @@ module Nurego
       URI.escape(key.to_s, Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))
     end
 
+=begin
     def self.flatten_params(params, parent_key=nil)
       result = []
       params.each do |key, value|
@@ -105,5 +107,6 @@ module Nurego
       end
       result
     end
+=end
   end
 end
