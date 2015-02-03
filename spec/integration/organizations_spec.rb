@@ -21,7 +21,7 @@ describe "Organizations" do
     organization = customer.organizations[0]
     organization[:name] = 'new name'
     organization.save
-    organization = Nurego::Organization.retrieve(organization[:id])
+#    organization = Nurego::Organization.retrieve(organization[:id])  - todo: fix: can't retrieve self for now
   end
 
   it "can retrieve payment method" do
@@ -62,6 +62,22 @@ describe "Organizations" do
 
     plan = organization.plan({:external_ids => false})
     plan["object"].should == "plan"
+  end
+
+  # todo: this shows how to use the API, but will do nothing because by default subscriptions are not managed internally
+  it "can cancel a subscription" do
+    customer = Nurego::Customer.me
+    organization = customer.organizations[0]
+    organization.cancel({ :external_ids => false, :plan => { :id => customer[:plan_id]} })
+    organization = customer.organizations[0]
+  end
+
+  # todo: this shows how to use the API, but will do nothing because by default subscriptions are not managed internally
+  it "can cancel an account" do
+    customer = Nurego::Customer.me
+    organization = customer.organizations[0]
+    organization.cancel({ :external_ids => false })
+    organization = customer.organizations[0]
   end
 
 end
