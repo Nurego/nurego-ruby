@@ -54,9 +54,10 @@ module Nurego
   @verify_ssl_certs = true
 
   @logger = nil
+  @external_ids = false
 
   class << self
-    attr_accessor :api_key, :api_base, :verify_ssl_certs, :api_version, :logger
+    attr_accessor :api_key, :api_base, :verify_ssl_certs, :api_version, :logger, :external_ids
   end
 
   def self.api_url(url='')
@@ -86,6 +87,7 @@ module Nurego
                           :ssl_ca_file => @ssl_bundle_path)
     end
 
+    params[:external_ids] = @external_ids if @external_ids
     params = Util.objects_to_ids(params)
     url = api_url(url)
 

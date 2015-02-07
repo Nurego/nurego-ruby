@@ -19,9 +19,12 @@ describe "Organizations" do
   it "can update org name" do
     customer = Nurego::Customer.me
     organization = customer.organizations[0]
+    organization.name.should_not eq 'new name'
     organization[:name] = 'new name'
     organization.save
-    organization = Nurego::Organization.retrieve(organization[:id])
+    customer = Nurego::Customer.me
+    organization = customer.organizations[0]
+    organization.name.should eq 'new name'
   end
 
   it "can retrieve payment method" do
@@ -52,7 +55,6 @@ describe "Organizations" do
     trial[:trial_days] = 123
     organization[:trial] = trial
 #    organization[:coupon] = Nurego::Discount.new('discount_id')
-    organization[:external_ids] = false
     organization.save
   end
 
@@ -60,8 +62,24 @@ describe "Organizations" do
     customer = Nurego::Customer.me
     organization = customer.organizations[0]
 
-    plan = organization.plan({:external_ids => false})
+    plan = organization.plan
     plan["object"].should == "plan"
+  end
+
+  # todo: this shows how to use the API, but will do nothing because by default subscriptions are not managed internally
+  it "can cancel a subscription" do
+    customer = Nurego::Customer.me
+    organization = customer.organizations[0]
+    organization.cancel({ :plan => { :id => customer[:plan_id]} })
+    organization = customer.organizations[0]
+  end
+
+  # todo: this shows how to use the API, but will do nothing because by default subscriptions are not managed internally
+  it "can cancel an account" do
+    customer = Nurego::Customer.me
+    organization = customer.organizations[0]
+    organization.cancel
+    organization = customer.organizations[0]
   end
 
 end
