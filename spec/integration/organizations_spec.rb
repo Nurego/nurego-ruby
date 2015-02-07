@@ -19,9 +19,12 @@ describe "Organizations" do
   it "can update org name" do
     customer = Nurego::Customer.me
     organization = customer.organizations[0]
+    organization.name.should_not eq 'new name'
     organization[:name] = 'new name'
     organization.save
-#    organization = Nurego::Organization.retrieve(organization[:id])  - todo: fix: can't retrieve self for now
+    customer = Nurego::Customer.me
+    organization = customer.organizations[0]
+    organization.name.should eq 'new name'
   end
 
   it "can retrieve payment method" do
@@ -52,7 +55,6 @@ describe "Organizations" do
     trial[:trial_days] = 123
     organization[:trial] = trial
 #    organization[:coupon] = Nurego::Discount.new('discount_id')
-    organization[:external_ids] = false
     organization.save
   end
 
@@ -60,7 +62,7 @@ describe "Organizations" do
     customer = Nurego::Customer.me
     organization = customer.organizations[0]
 
-    plan = organization.plan({:external_ids => false})
+    plan = organization.plan
     plan["object"].should == "plan"
   end
 
@@ -68,7 +70,7 @@ describe "Organizations" do
   it "can cancel a subscription" do
     customer = Nurego::Customer.me
     organization = customer.organizations[0]
-    organization.cancel({ :external_ids => false, :plan => { :id => customer[:plan_id]} })
+    organization.cancel({ :plan => { :id => customer[:plan_id]} })
     organization = customer.organizations[0]
   end
 
@@ -76,7 +78,7 @@ describe "Organizations" do
   it "can cancel an account" do
     customer = Nurego::Customer.me
     organization = customer.organizations[0]
-    organization.cancel({ :external_ids => false })
+    organization.cancel
     organization = customer.organizations[0]
   end
 
