@@ -3,21 +3,19 @@ module Nurego
     include Nurego::APIOperations::List
     include Nurego::APIOperations::Create
 
-    def set_usage(feature_id, amount, provider_name = nil)
+    def set_usage(feature_id, amount)
       payload = {
           feature_id: feature_id,
           organization: id,
           amount: amount,
       }
-      payload[:provider_name] = provider_name if provider_name
       response, api_key = Nurego.request(:put, "/v1/entitlements/usage", nil, payload)
     end
 
-    def is_allowed(features, provider_name = nil)
+    def is_allowed(features)
       payload =  {
           :organization => id,
       }
-      payload[:provider_name] = provider_name if provider_name
 
       features = features.is_a?(Array) ? features : [features]
       features_url = structure_sensitive_mimic_to_query(features, 'features')
