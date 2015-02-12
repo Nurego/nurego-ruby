@@ -4,6 +4,7 @@ describe "Entitlements" do
   before(:all) do
     setup_nurego_lib
     setup_login_and_login
+    Nurego.external_ids = false
   end
 
   it "can fetch the entitlement" do
@@ -20,18 +21,18 @@ describe "Entitlements" do
     max_amount = customers_ent[0][:max_allowed_amount]
     ent = Nurego::Entitlement.new({id: organization[:id]})
 
-    ent.set_usage(feature_id, 6, 'internal')
+    ent.set_usage(feature_id, 6)
 
-    allowed = ent.is_allowed({ :feature_id => feature_id, :requested_amount => 1 }, 'internal')
+    allowed = ent.is_allowed({ :feature_id => feature_id, :requested_amount => 1 })
     expect(allowed[0][:is_allowed]).to eq true
     expect(allowed[0][:current_used_amount]).to eq 6
     expect(allowed[0][:max_allowed_amount]).to eq max_amount
 
     allowed = ent.is_allowed([{ :feature_id => feature_id, :requested_amount => 1 },
-                              { :feature_id => feature_id, :requested_amount => 2 }],  'internal')
+                              { :feature_id => feature_id, :requested_amount => 2 }])
 
     expect(allowed.length).to eq 2
 
-    all = Nurego::Entitlement.all({:organization => organization[:id], :provider_name => 'internal' }, Nurego.api_key)
+    all = Nurego::Entitlement.all({:organization => organization[:id] }, Nurego.api_key)
   end
 end
