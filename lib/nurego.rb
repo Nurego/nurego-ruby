@@ -198,7 +198,16 @@ module Nurego
       @logger.info(opts.inspect)
     end
     
-    RestClient::Request.execute(opts)
+    start_time = Time.now
+    request_response = RestClient::Request.execute(opts)
+    end_time = Time.now
+
+    if @logger
+      @logger.info("Request with id #{opts[:headers][:x_request_id]} to url #{opts[:url]} " + 
+                   "took #{(end_time - start_time)} seconds")
+    end
+
+    request_response
   end
 
   def self.parse(response)
