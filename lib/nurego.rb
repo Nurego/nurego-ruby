@@ -35,6 +35,7 @@ require 'nurego/bill'
 require 'nurego/payment_method'
 require 'nurego/entitlement'
 require 'nurego/discount'
+require 'nurego/legal_doc'
 require 'nurego/extensions'
 
 
