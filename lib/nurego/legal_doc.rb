@@ -9,10 +9,5 @@ module Nurego
       Util.convert_to_nurego_object(response, api_key)
     end
 
-    def url
-      puts "URL #{LegalDoc.url}"
-      LegalDoc.url
-    end
-
   end
 end
