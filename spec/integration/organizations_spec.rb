@@ -10,7 +10,7 @@ describe "Organizations" do
     customer = Nurego::Customer.me
     organization = customer.organizations
     instances = organization[0].instances
-    instances.size.should == 2
+    instances.count.should == 2
     instances.each do |instance|
       instance["object"] == "instance"
     end

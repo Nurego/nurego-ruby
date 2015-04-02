@@ -12,7 +12,7 @@ describe "Connectors" do
     puts "#{organization.inspect}"
     instances = organization[0].instances
     puts "#{instances.inspect}"
-    connectors = instances[1].connectors
+    connectors = instances.data[1].connectors
     puts "#{connectors.inspect}"
   end
 end
