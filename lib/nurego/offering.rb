@@ -12,8 +12,10 @@ module Nurego
     end
 
     def self.as_cf_catalog(url, api_key)
-      response, api_key = Nurego.request(:get, url, api_key, {:distribution_channel => 'cf'})
+      Nurego.api_base = url
+      response, api_key = Nurego.request(:get, self.url, api_key, {:distribution_channel => 'cf'})
       Util.convert_to_nurego_object(response, api_key).to_json
+      # todo Add Parsing to catalog format
     end
 
     def plans
