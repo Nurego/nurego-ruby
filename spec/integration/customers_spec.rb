@@ -21,7 +21,7 @@ describe "Customers" do
 
   it "can retrieve organization from customer" do
     customer = Nurego::Customer.me
-    organization = customer.organizations[0]
+    organization = Nurego::Organization.retrieve(id: customer[:organization_id])
     organization["object"].should == "organization"
   end
 

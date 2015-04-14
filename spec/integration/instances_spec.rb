@@ -8,8 +8,8 @@ describe "Instances" do
 
   it "can retrieve instances" do
     customer = Nurego::Customer.me
-    organization = customer.organizations
-    instances = organization[0].instances
+    organization = Nurego::Organization.retrieve(id: customer[:organization_id])
+    instances = organization.instances
     instances.count.should == 2
     instances.each do |instance|
       instance["object"] == "instance"
@@ -20,8 +20,8 @@ describe "Instances" do
     # PENDING on connector fix
     # TODO create real connector and fetch it
     customer = Nurego::Customer.me
-    organization = customer.organizations
-    instances = organization[0].instances
+    organization = Nurego::Organization.retrieve(id: customer[:organization_id])
+    instances = organization.instances
     instances.count.should == 2
     instances.each do |instance|
       connectors = instance.connectors

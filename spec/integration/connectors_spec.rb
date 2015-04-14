@@ -8,9 +8,9 @@ describe "Connectors" do
 
   it "can list connectors" do
     customer = Nurego::Customer.me
-    organization = customer.organizations
+    organization = Nurego::Organization.retrieve(id: customer[:organization_id])
     puts "#{organization.inspect}"
-    instances = organization[0].instances
+    instances = organization.instances
     puts "#{instances.inspect}"
     connectors = instances.data[1].connectors
     puts "#{connectors.inspect}"
