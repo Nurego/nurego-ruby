@@ -22,6 +22,7 @@ end
 def register
   return if ENV['CUSTOMER_SET'] == "yes"
 
+  Nurego::Auth.logout
   registration = Nurego::Registration.create({email: EXAMPLE_EMAIL})
   customer = registration.complete(id: registration.id, password: EXAMPLE_PASSWORD)
   ENV['CUSTOMER_SET'] = (customer["email"] == EXAMPLE_EMAIL && customer["object"] == "customer") ? "yes" : "no"
