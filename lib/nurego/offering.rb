@@ -11,10 +11,9 @@ module Nurego
       Util.convert_to_nurego_object(response, api_key)
     end
 
-    def self.as_cf_catalog(url, api_key )
-      Nurego.api_base = url if url
-      response, api_key = Nurego.request(:get, self.url, api_key, {:distribution_channel => 'cf'})
-      offering_to_broker_catalog(Util.convert_to_nurego_object(response, api_key)).to_json
+    def to_cloud_foundry_catalog
+      # require BSS to expose service_id, service_name, service_description for Offering
+      Offering.offering_to_broker_catalog(self).to_json
     end
 
     def plans
@@ -28,9 +27,10 @@ private
           offer_id: nurego_offering['id'],
           offer_name: nurego_offering['name'],
           offer_description: nurego_offering['description'],
-          :services => []
+          services: []
       }
 
+      # Expect single service per offering.
       cf_service = {
           # required
           id: nurego_offering['service_id'],
