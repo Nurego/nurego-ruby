@@ -13,7 +13,7 @@ module Nurego
 
     def to_cloud_foundry_catalog
       # require BSS to expose service_id, service_name, service_description for Offering
-      Offering.offering_to_broker_catalog(self).to_json
+      offering_to_broker_catalog.to_json
     end
 
     def plans
@@ -22,7 +22,7 @@ module Nurego
 
 private
 
-    def self.offering_to_broker_catalog(nurego_offering)
+    def offering_to_broker_catalog
       cf_offer = {
           offer_id: nurego_offering['id'],
           offer_name: nurego_offering['name'],
