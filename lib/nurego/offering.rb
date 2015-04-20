@@ -24,18 +24,18 @@ private
 
     def offering_to_broker_catalog
       cf_offer = {
-          offer_id: nurego_offering['id'],
-          offer_name: nurego_offering['name'],
-          offer_description: nurego_offering['description'],
+          offer_id: self['id'],
+          offer_name: self['name'],
+          offer_description: self['description'],
           services: []
       }
 
       # Expect single service per offering.
       cf_service = {
           # required
-          id: nurego_offering['service_id'],
-          name: nurego_offering['service_name'],
-          description: nurego_offering['service_description'],
+          id: self['service_id'],
+          name: self['service_name'],
+          description: self['service_description'],
           bindable: true,
           plans: []
 
@@ -48,7 +48,7 @@ private
 
       }
 
-      nurego_offering['plans']['data'].each do | nurego_plan |
+      self['plans']['data'].each do | nurego_plan |
         cf_plan = {
             # required
             id: nurego_plan['id'],
