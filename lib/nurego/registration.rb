@@ -11,7 +11,7 @@ module Nurego
 
     def self.find_by_external_id(external_id, params = { })
       response, api_key = Nurego.request(:get, find_by_external_id_url(external_id), @api_key, params)
-      response
+      Util.convert_to_nurego_object(response, api_key)
     end
 
     private
