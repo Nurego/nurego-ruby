@@ -24,6 +24,7 @@ module Nurego
         'connector' => Connector,
         'passwordreset' => PasswordReset,
         'offering' => Offering,
+        'service' => Service,
         'plan' => Plan,
         'feature' => Feature,
         'paymentmethod' => PaymentMethod,
