@@ -1,4 +1,5 @@
 module Nurego
+
   class Offering < APIResource
 
     def self.retrieve(id, api_key = nil)
@@ -13,5 +14,6 @@ module Nurego
     def plans
       Plan.all({:offering => id }, @api_key)
     end
+
   end
 end

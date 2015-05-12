@@ -29,6 +29,7 @@ require 'nurego/instance'
 require 'nurego/connector'
 require 'nurego/password_reset'
 require 'nurego/offering'
+require 'nurego/service'
 require 'nurego/plan'
 require 'nurego/feature'
 require 'nurego/bill'
@@ -232,6 +233,10 @@ module Nurego
     begin
       error_obj = Nurego::JSON.load(rbody)
       error_obj = Util.symbolize_names(error_obj)
+      # todo: remove creating :error from description when bss return is consistent
+      if error_obj[:description]
+        error_obj[:error] = { code:rcode, message:error_obj[:description]}
+      end
       error = (error_obj && error_obj[:error]) or raise NuregoError.new # escape from parsing
 
     rescue MultiJson::DecodeError, NuregoError
