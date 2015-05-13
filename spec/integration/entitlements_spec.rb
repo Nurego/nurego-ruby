@@ -12,7 +12,7 @@ describe "Entitlements" do
     # TODO 2: test using external ids too
 
     customer = Nurego::Customer.me
-    organization = customer.organizations[0]
+    organization = customer.organization
     ents = organization.entitlements(nil)
 
     customers_ent = organization.entitlements('subscribers')

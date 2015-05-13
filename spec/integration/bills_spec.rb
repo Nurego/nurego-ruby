@@ -8,7 +8,7 @@ describe "Bills" do
 
   it "can fetch the bills form customer with no bill" do
     customer = Nurego::Customer.me
-    organization = customer.organizations[0]
+    organization = customer.organization
     bills = organization.bills
     bills["object"].should == "list"
     bills["count"].should == 0

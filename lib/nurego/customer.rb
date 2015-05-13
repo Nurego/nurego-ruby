@@ -7,8 +7,8 @@ module Nurego
       Util.convert_to_nurego_object(response, api_key)
     end
 
-    def organizations
-      Organization.all({:customer => id }, @api_key)
+    def organization
+      Nurego::Organization.retrieve(id: self[:organization_id])
     end
 
     def self.me_url
