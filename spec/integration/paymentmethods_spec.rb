@@ -10,7 +10,7 @@ describe "PaymentMethods" do
     # TODO: make the real token here
 
     customer = Nurego::Customer.me
-    organization = customer.organizations[0]
+    organization = customer.organization
 
     Nurego::PaymentMethod.create({   organization: organization["id"],
                                      payment_method: "cc",

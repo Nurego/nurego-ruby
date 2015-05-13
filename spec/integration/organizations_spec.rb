@@ -8,8 +8,8 @@ describe "Organizations" do
 
   it "can retrieve instances" do
     customer = Nurego::Customer.me
-    organization = customer.organizations
-    instances = organization[0].instances
+    organization = customer.organization
+    instances = organization.instances
     instances.count.should == 2
     instances.each do |instance|
       instance["object"] == "instance"
@@ -18,12 +18,12 @@ describe "Organizations" do
 
   it "can update org name" do
     customer = Nurego::Customer.me
-    organization = customer.organizations[0]
+    organization = customer.organization
     organization.name.should_not eq 'new name'
     organization[:name] = 'new name'
     organization.save
     customer = Nurego::Customer.me
-    organization = customer.organizations[0]
+    organization = customer.organization
     organization.name.should eq 'new name'
   end
 
@@ -31,7 +31,7 @@ describe "Organizations" do
     # TODO create a real payment method here
 
     customer = Nurego::Customer.me
-    organization = customer.organizations[0]
+    organization = customer.organization
     paymentmethod = organization.paymentmethod
     paymentmethod["object"].should == "paymentmethod"
   end
@@ -40,7 +40,7 @@ describe "Organizations" do
     # TODO create a real bill
 
     customer = Nurego::Customer.me
-    organization = customer.organizations[0]
+    organization = customer.organization
     bills = organization.bills
     bill = Nurego::Bill.retrieve(id: bills[:data][0][:id]) if bills[:count] > 0
     bill["object"].should == "bill" if bill
@@ -49,7 +49,7 @@ describe "Organizations" do
   # todo: use the same method to update coupons and check results
   it "can update organization's subscription" do
     customer = Nurego::Customer.me
-    organization = customer.organizations[0]
+    organization = customer.organization
     organization[:plan] = Nurego::Plan.new(customer[:plan_id])
     trial = Nurego::Discount.new
     trial[:trial_days] = 123
@@ -60,7 +60,7 @@ describe "Organizations" do
 
   it "can fetch the current plan" do
     customer = Nurego::Customer.me
-    organization = customer.organizations[0]
+    organization = customer.organization
 
     plan = organization.plan
     plan["object"].should == "plan"
@@ -69,17 +69,17 @@ describe "Organizations" do
   # todo: this shows how to use the API, but will do nothing because by default subscriptions are not managed internally
   it "can cancel a subscription" do
     customer = Nurego::Customer.me
-    organization = customer.organizations[0]
+    organization = customer.organization
     organization.cancel({ :plan => { :id => customer[:plan_id]} })
-    organization = customer.organizations[0]
+    organization = customer.organization
   end
 
   # todo: this shows how to use the API, but will do nothing because by default subscriptions are not managed internally
   it "can cancel an account" do
     customer = Nurego::Customer.me
-    organization = customer.organizations[0]
+    organization = customer.organization
     organization.cancel
-    organization = customer.organizations[0]
+    organization = customer.organization
   end
 
 end
