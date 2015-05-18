@@ -66,6 +66,15 @@ describe "Organizations" do
     plan["object"].should == "plan"
   end
 
+  it "can fetch feature data" do
+    customer = Nurego::Customer.me
+    organization = customer.organization
+
+    res = organization.feature_data({feature_id: 'some feature id'})            
+    res["object"].should == "list"
+    res["data"].should be_empty
+  end
+
   # todo: this shows how to use the API, but will do nothing because by default subscriptions are not managed internally
   it "can cancel a subscription" do
     customer = Nurego::Customer.me
