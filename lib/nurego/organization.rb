@@ -20,7 +20,7 @@ module Nurego
     end
 
     def entitlements(feature_id = nil)
-      Entitlement.all({:organization => id, :feature_id => feature_id, :provider_name => 'internal' }, @api_key)
+      Entitlement.all({:organization => id, :feature_id => feature_id, :external_ids => 'false' }, @api_key)
     end
 
     def plan(params = {}, api_key = nil)

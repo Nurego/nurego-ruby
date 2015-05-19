@@ -17,21 +17,17 @@ describe "Entitlements" do
 
     customers_ent = organization.entitlements('subscribers')
 
-    feature_id = customers_ent[0][:id]
-    max_amount = customers_ent[0][:max_allowed_amount]
+    feature_id = customers_ent[:data][0][:id]
+    max_amount = customers_ent[:data][0][:max_allowed_amount]
     ent = Nurego::Entitlement.new({id: organization[:id]})
 
     ent.set_usage(feature_id, 6)
 
-    allowed = ent.is_allowed({ :feature_id => feature_id, :requested_amount => 1 })
-    expect(allowed[0][:is_allowed]).to eq true
-    expect(allowed[0][:current_used_amount]).to eq 6
-    expect(allowed[0][:max_allowed_amount]).to eq max_amount
+    allowed =  organization.entitlements(feature_id)
 
-    allowed = ent.is_allowed([{ :feature_id => feature_id, :requested_amount => 1 },
-                              { :feature_id => feature_id, :requested_amount => 2 }])
-
-    expect(allowed.length).to eq 2
+    expect(allowed[:data][0][:max_allowed_amount] >= allowed[:data][0][:current_used_amount] + 1).to eq true
+    expect(allowed[:data][0][:current_used_amount]).to eq 6
+    expect(allowed[:data][0][:max_allowed_amount]).to eq max_amount
 
     all = Nurego::Entitlement.all({:organization => organization[:id] }, Nurego.api_key)
   end
