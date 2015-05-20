@@ -6,21 +6,13 @@ module Nurego
     def set_usage(feature_id, amount)
       payload = {
           feature_id: feature_id,
-          organization: id,
           amount: amount,
       }
-      response, api_key = Nurego.request(:put, "/v1/entitlements/usage", nil, payload)
+      response, api_key = Nurego.request(:put, "/v1/organizations/#{id}/entitlements/usage", nil, payload)
     end
 
-    def is_allowed(features)
-      payload =  {
-          :organization => id,
-      }
-
-      features = features.is_a?(Array) ? features : [features]
-      features_url = structure_sensitive_mimic_to_query(features, 'features')
-      response, api_key = Nurego.request(:get, "/v1/entitlements/allowed?#{features_url}",
-                                         nil, payload)
+    def self.all(filters={}, api_key=nil)
+      response, api_key = Nurego.request(:get, "/v1/organizations/#{filters[:organization]}/entitlements", api_key, filters)
       Util.convert_to_nurego_object(response, api_key)
     end
 
