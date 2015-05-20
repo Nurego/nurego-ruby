@@ -55,7 +55,7 @@ Get entitlement for customer
 ```
 begin
   Nurego.api_key = “l230bc7b-9b85-4c5f-ad9f-4eeeef4d4f44”
-  ents = Nurego::Organization.entitlements({customer_id: 'cus_2shm2PizVL8QOp'})
+  ents = Nurego::Organization.entitlements('cus_2shm2PizVL8QOp')
   puts ents.inspect
 rescue Nurego::NuregoError => e
   puts “Got exception #{e}”
@@ -74,7 +74,7 @@ end
 ```
 begin
   Nurego.api_key = “l230bc7b-9b85-4c5f-ad9f-4eeeef4d4f44”
-  ents = Nurego::Organization.entitlements({customer_id: 'cus_2shm2PizVL8QOp', feature_id: 'subscribers'})
+  ents = Nurego::Organization.entitlements('cus_2shm2PizVL8QOp', {feature_id: 'subscribers'})
   puts ents.inspect
 rescue Nurego::NuregoError => e
   puts “Got exception #{e}”
@@ -97,23 +97,6 @@ begin
   Nurego.api_key = “l230bc7b-9b85-4c5f-ad9f-4eeeef4d4f44”
   ent = Nurego::Entitlement.new({id: 'cus_2shm2PizVL8QOp'})
   ent.set_usage(feature_id, max_amount - 1)
-rescue Nurego::NuregoError => e
-  puts “Got exception #{e}”
-end
-```
-
-Check allowed usage for customer
-
-```
-begin
-  Nurego.api_key = “l230bc7b-9b85-4c5f-ad9f-4eeeef4d4f44”
-  ent = Nurego::Entitlement.new({id: 'cus_2shm2PizVL8QOp'})
-  
-  allowed = ent.is_allowed(feature_id, 1)
-  puts allowed.inspect
-  
-  allowed = ent.is_allowed(feature_id, 2)
-  puts allowed.inspect
 rescue Nurego::NuregoError => e
   puts “Got exception #{e}”
 end

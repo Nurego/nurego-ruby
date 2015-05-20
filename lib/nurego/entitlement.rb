@@ -11,8 +11,8 @@ module Nurego
       response, api_key = Nurego.request(:put, "/v1/organizations/#{id}/entitlements/usage", nil, payload)
     end
 
-    def self.all(filters={}, api_key=nil)
-      response, api_key = Nurego.request(:get, "/v1/organizations/#{filters[:organization]}/entitlements", api_key, filters)
+    def self.all(organization_id, filters={}, api_key=nil)
+      response, api_key = Nurego.request(:get, "/v1/organizations/#{organization_id}/entitlements", api_key, filters)
       Util.convert_to_nurego_object(response, api_key)
     end
 

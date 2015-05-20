@@ -29,6 +29,6 @@ describe "Entitlements" do
     expect(allowed[:data][0][:current_used_amount]).to eq 6
     expect(allowed[:data][0][:max_allowed_amount]).to eq max_amount
 
-    all = Nurego::Entitlement.all({:organization => organization[:id] }, Nurego.api_key)
+    all = Nurego::Entitlement.all(organization[:id], {}, Nurego.api_key)
   end
 end
