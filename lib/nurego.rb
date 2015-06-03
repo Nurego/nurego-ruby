@@ -38,6 +38,7 @@ require 'nurego/entitlement'
 require 'nurego/discount'
 require 'nurego/legal_doc'
 require 'nurego/extensions'
+require 'nurego/subscription'
 
 
 # Errors
