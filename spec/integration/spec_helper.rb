@@ -3,6 +3,7 @@ require_relative "../../lib/nurego"
 
 EXAMPLE_EMAIL = "integration.test+#{UUIDTools::UUID.random_create.to_s}@openskymarkets.com"
 EXAMPLE_PASSWORD = "password"
+SERVICE_ID = 'nurego'#"197f9207-7325-4d75-983a-116b43fb9cc8"
 
 def setup_nurego_lib(no_register = false, public_key = false)
   Nurego.api_base = ENV['API_BASE'] || "http://localhost:31001"

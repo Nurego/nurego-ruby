@@ -25,6 +25,7 @@ module Nurego
         'passwordreset' => PasswordReset,
         'offering' => Offering,
         'service' => Service,
+        'subscription' => Subscription,
         'plan' => Plan,
         'feature' => Feature,
         'paymentmethod' => PaymentMethod,

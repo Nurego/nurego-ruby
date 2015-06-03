@@ -6,7 +6,7 @@ describe "Services" do
   end
 
   it "can fetch a service " do
-    service = Nurego::Service.retrieve("197f9207-7325-4d75-983a-116b43fb9cc8")
+    service = Nurego::Service.retrieve(SERVICE_ID)
     service["object"].should == "service"
     service.offerings["object"].should == "list"
     service.offerings.each do |offering|
@@ -21,7 +21,7 @@ describe "Services" do
   end
 
   it "can fetch service with distribution channel" do
-    service = Nurego::Service.retrieve({ id:'197f9207-7325-4d75-983a-116b43fb9cc8', distribution_channel:'website' })
+    service = Nurego::Service.retrieve({ id:SERVICE_ID, distribution_channel:'website' })
     service["object"].should == "service"
     service.offerings["object"].should == "list"
     service.offerings.each do |offering|
@@ -36,7 +36,7 @@ describe "Services" do
   end
 
   it "can parse service offering to cloud foundry catalog" do
-    service = Nurego::Service.retrieve("197f9207-7325-4d75-983a-116b43fb9cc8")
+    service = Nurego::Service.retrieve(SERVICE_ID)
     offer_as_catalog = service.to_cloud_foundry_catalog
     response_json = JSON.parse offer_as_catalog
 
