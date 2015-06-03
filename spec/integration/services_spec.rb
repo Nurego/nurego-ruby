@@ -35,34 +35,4 @@ describe "Services" do
     end
   end
 
-  it "can parse service offering to cloud foundry catalog" do
-    service = Nurego::Service.retrieve(SERVICE_ID)
-    offer_as_catalog = service.to_cloud_foundry_catalog
-    response_json = JSON.parse offer_as_catalog
-
-    expect(response_json.keys).to include("services")
-
-    services = response_json["services"]
-    expect(services.length).to be > 0
-
-    services.each do |service|
-      expect(service.keys.length).to be >= 5
-      expect(service.keys).to include("id")
-      expect(service.keys).to include("name")
-      expect(service.keys).to include("description")
-      expect(service.keys).to include("bindable")
-      expect(service.keys).to include("plans")
-
-      plans = service["plans"]
-      expect(service.keys.length).to be >= 5
-
-      expect(plans.length).to be > 0
-      plans.each do |plan|
-        expect(plan.keys.length).to be >= 3
-        expect(plan.keys).to include("id")
-        expect(plan.keys).to include("name")
-        expect(plan.keys).to include("description")
-      end
-    end
-  end
 end

@@ -24,8 +24,8 @@ module Nurego
     end
 
     # Delete override
-    def delete
-      response, api_key = Nurego.request(:delete, url(self.organization_id), @api_key)
+    def delete(params={})
+      response, api_key = Nurego.request(:delete, url(self.organization_id), @api_key, params)
       refresh_from(response, api_key)
       self
     end

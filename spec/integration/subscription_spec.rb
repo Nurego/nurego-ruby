@@ -7,22 +7,20 @@ describe "Subscriptions" do
   end
 
   def create_subscription(organization, plan)
-    create_params = { provider: 'cloud-foundry',
-                      external_subscription_id: 'external_subscription_id',
-                      # external_ids: true,
-                      plan_id: plan.id,
-                      already_provisioned: true
-    }
+    create_params = { plan_id: plan.id }
     Nurego::Subscription.create(organization.id, create_params)
   end
 
   it "can create a subscription" do
     plan = Nurego::Offering.current.plans.first
     organization = Nurego::Customer.me.organization
+    current_subscriptions = Nurego::Customer.me.subscriptions.data
     sub = create_subscription(organization, plan)
     expect(sub).to be_a_kind_of(Nurego::Subscription)
     expect(sub.plan_id).to eq plan.id
     expect(sub.organization_id).to eq organization.id
+    expect(Nurego::Customer.me.subscriptions.data.count).to eq current_subscriptions.count+1
+    expect(Nurego::Customer.me.subscriptions.data.any? { |subscription| subscription.id == sub.id }).to be_true
   end
 
   it "can retrieve a subscription" do
