@@ -1,34 +1,40 @@
 module Nurego
   module Cf
     class BrokerUtility
+      PROVIDER = 'cloud-foundry'
+      @external_ids = true
+
+      class << self
+        attr_accessor :external_ids
+      end
+
       def self.provision(params)
-        # todo: what to return if nurego is notified ?
-        return true if nurego_notified(params)
+        return nil if nurego_notified(params)
         raise InvalidRequestError.new('Invalid parameter instance_id', 'instance_id') unless params['instance_id']
-        create_params = { provider: 'cloud-foundry',
+        create_params = { provider: PROVIDER,
                           external_subscription_id: params['instance_id'],
-                          external_ids: true,
+                          external_ids: @external_ids,
                           plan_id: params['plan_id'],
-                          already_provisioned: true
+                          skip_service_webhook: true
         }
-        Subscription.for(params['organization_guid']).create(create_params)
+        Subscription.create(params['organization_guid'], create_params)
       end
 
       def self.update(params)
-        # todo: what to return if nurego is notified ?
-        return true if nurego_notified(params)
+        return nil if nurego_notified(params)
         raise InvalidRequestError.new('Invalid parameter instance_id', 'instance_id') unless params['instance_id']
         sub = Subscription.retrieve(params['instance_id'])
         sub.plan_id = params['plan_id']
+        sub.provider = PROVIDER
+        sub.skip_service_webhook = true
         sub.save
       end
 
       def self.deprovision(params)
-        # todo: what to return if nurego is notified ?
-        return true if nurego_notified(params)
+        return nil if nurego_notified(params)
         raise InvalidRequestError.new('Invalid parameter instance_id', 'instance_id') unless params['instance_id']
         sub = Subscription.retrieve(params['instance_id'])
-        sub.delete
+        sub.delete({ provider: PROVIDER, skip_service_webhook: true })
       end
 
       def self.nurego_notified(params)
@@ -36,65 +42,57 @@ module Nurego
       end
 
       def self.get_service_catalog(service_id)
-        service = Service.retrieve()
+        service = Service.retrieve(service_id)
+        service_to_cloud_foundry_catalog(service)
       end
 
-    #
-    # public static void deprovision(Map<String, String> params) throws NuregoException {
-    #   if (!nuregoNotified(params)) {
-    #     if (!params.containsKey("instance_id")) throw new InvalidRequestException("Invalid parameter instance_id", "instance_id", null);
-    #       Subscription sub = Subscription.retrieve(params.get("instance_id"));
-    #       sub.cancel();
-    #     }
-    #   }
-    #
-    # public static String getServiceCatalog(String serviceId) throws NuregoException {
-    #   Service retrievedService = Service.retrieve(serviceId);
-    #     if (retrievedService.getOfferings().getCount() == 0) return null;
-    #       Offering offering = retrievedService.getOfferings().getData().get(0);
-    #       JSONArray plans = new JSONArray();
-    #       for (Plan plan : offering.getPlans().getData()) {
-    #         JSONObject planObj = new JSONObject();
-    #       planObj.put("id", plan.getId());
-    #       planObj.put("name", plan.getName());
-    #       planObj.put("description", plan.getDescription());
-    #       Feature recurring = getRecurringFeature(plan.getFeatures().getData());
-    #       planObj.put("free", !(recurring!= null && recurring.getPrice() > 0));
-    #       plans.add(planObj);
-    #     }
-    #
-    #     JSONObject service = new JSONObject();
-    #     service.put("id", retrievedService.getId());
-    #     service.put("name", retrievedService.getName());
-    #     service.put("description", retrievedService.getDescription());
-    #     service.put("bindable", true);
-    #     service.put("plans", plans);
-    #
-    #     JSONArray services = new JSONArray();
-    #     services.add(service);
-    #
-    #     JSONObject finalObj = new JSONObject();
-    #     finalObj.put("offer_id", offering.getId());
-    #     finalObj.put("offer_name", offering.getName());
-    #     finalObj.put("offer_description", offering.getDescription());
-    #     finalObj.put("services", services);
-    #
-    #     return finalObj.toString();
-    #   }
-    #
-    # private static boolean nuregoNotified(Map<String, String> params) {
-    #   return params.containsKey("nurego_notified") && params.get("nurego_notified").equals("true");
-    # }
-    #
-    # private static Feature getRecurringFeature(List<Feature> features) {
-    #   for (Feature feature : features) {
-    #     if (feature.getElementType().equals("recurring")) {
-    #       return feature;
-    #
-    #     }
-    #   }
-    #   return null;
-    # }
+      private
+
+      def self.service_to_cloud_foundry_catalog(service)
+        cf_catalog = {
+            offer_id: service.offerings.first['id'],
+            offer_name: service.offerings.first['name'],
+            offer_description: service.offerings.first['description'],
+            services: []
+        }
+        cf_service = {
+            # required
+            id: service['id'],
+            name: service['name'],
+            description: service['description'],
+            bindable: true,
+            plans: []
+
+            ## possible
+            # tags: [],
+            # metadata: Object,
+            # requires: [],
+            # plan_updateable: true,
+            # dashboard_client: Object {id,secret,redirect_uri}
+
+        }
+        service.offerings.first['plans']['data'].each do | nurego_plan |
+          cf_plan = {
+              # required
+              id: nurego_plan['id'],
+              name: nurego_plan['name'],
+              description: nurego_plan['description'],
+
+              ## possible
+              # metadata: Object,
+              # free: true,
+          }
+
+          recurring = nurego_plan['features']['data'].find { | feature | feature['element_type'] == 'recurring' }
+          cf_plan[:free] = !(recurring && recurring['price'] > 0)
+
+          cf_service[:plans] << cf_plan # Add plans to the service
+        end
+        cf_catalog[:services] << cf_service # Add service to offer
+
+        cf_catalog.to_json
+      end
+
     end
   end
 end
