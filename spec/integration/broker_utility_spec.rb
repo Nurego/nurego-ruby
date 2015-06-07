@@ -8,7 +8,7 @@ describe "Broker Utility" do
     @test_instance_id = SecureRandom.uuid
   end
 
-  it "doesn't notifies on provision requests from proxy" do
+  it "doesn't notify on provision requests from proxy" do
     # mocked incoming provision params from nurego-cf-proxy
     provision_params = {
         'nurego_notified' => true,

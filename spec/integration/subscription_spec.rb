@@ -38,6 +38,7 @@ describe "Subscriptions" do
     plan = Nurego::Offering.current.plans.first
     organization = Nurego::Customer.me.organization
     sub = create_subscription(organization, plan)
+    expect(Nurego::Offering.current.plans.data[1]).not_to be_nil
     plan2 = Nurego::Offering.current.plans.data[1].id
     sub.plan_id = plan2
     id = sub.id
@@ -50,9 +51,9 @@ describe "Subscriptions" do
     organization = Nurego::Customer.me.organization
     sub = create_subscription(organization, plan)
     id = sub.id
-    now = Time.now.iso8601
+    now = Time.now
     sub.delete
     sub = Nurego::Subscription.retrieve(id)
-    expect(sub.subscription_end).to eq now
+    expect(Time.parse(sub.subscription_end).to_i).to be_within(60).of(now.to_i)
   end
 end
