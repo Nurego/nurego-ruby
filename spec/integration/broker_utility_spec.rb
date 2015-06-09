@@ -151,6 +151,7 @@ describe "Broker Utility" do
         expect(plan.keys).to include("id")
         expect(plan.keys).to include("name")
         expect(plan.keys).to include("description")
+        expect(plan['description']).not_to be_nil
       end
     end
   end
