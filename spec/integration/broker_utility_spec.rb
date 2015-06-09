@@ -92,21 +92,6 @@ describe "Broker Utility" do
   end
 
   it "notifies on subscription cancellation" do
-    ## bypass for:
-    # create a new subscription with new external id until bss will transfer external ids on subscription update
-    @test_instance_id = SecureRandom.uuid
-    # mocked incoming provision params from cli
-    provision_params = {
-        'instance_id' => @test_instance_id,
-        'plan_id' => Nurego::Offering.current.plans.first.id,
-        'organization_guid' => Nurego::Customer.me.organization.id,
-        'service_id' => 'some_service_id',
-        'space_guid' => 'some_space_guid'
-    }
-    # call the BrokerUtility
-    Nurego::Cf::BrokerUtility.provision(provision_params)
-    ## end of bypass
-    ## todo: clean bypass after bss fix
     # catch requests
     original_exec_req = Nurego.method(:execute_request)
     allow(Nurego).to receive(:execute_request) do |opts|
@@ -166,6 +151,7 @@ describe "Broker Utility" do
         expect(plan.keys).to include("id")
         expect(plan.keys).to include("name")
         expect(plan.keys).to include("description")
+        expect(plan['description']).not_to be_nil
       end
     end
   end

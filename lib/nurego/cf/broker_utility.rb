@@ -76,7 +76,7 @@ module Nurego
               # required
               id: nurego_plan['id'],
               name: nurego_plan['name'],
-              description: nurego_plan['description'],
+              description: nurego_plan['description'] || " ",
 
               ## possible
               # metadata: Object,
