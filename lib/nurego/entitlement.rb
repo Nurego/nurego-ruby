@@ -8,7 +8,7 @@ module Nurego
           feature_id: feature_id,
           amount: amount,
       }
-      response, api_key = Nurego.request(:put, "/v1/organizations/#{id}/entitlements/usage", nil, payload)
+      response, api_key = Nurego.request(:post, "/v1/organizations/#{id}/entitlements/usage", nil, payload)
     end
 
     def self.all(organization_id, filters={}, api_key=nil)
