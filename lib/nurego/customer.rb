@@ -15,8 +15,8 @@ module Nurego
       '/v1/customers/me'
     end
 
-    def self.update_plan(plan_id)
-      response, api_key = Nurego.request(:put, "/v1/customers/plan", nil, { :plan_id => plan_id })
+    def self.update_plan(plan_id, sub_id)
+      response, api_key = Nurego.request(:post, "/v1/customers/subscriptions/#{CGI.escape(sub_id)}", nil, { :plan_id => plan_id })
       Util.convert_to_nurego_object(response, api_key)
     end
 

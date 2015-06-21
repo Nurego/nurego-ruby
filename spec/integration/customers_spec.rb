@@ -29,7 +29,7 @@ describe "Customers" do
     customer = Nurego::Customer.me
 
     plan_guid = customer[:plan_id]
-    Nurego::Customer.update_plan(plan_guid) # update to the same plan, as we don't know if there's more than one
+    Nurego::Customer.update_plan(plan_guid, customer[:subscriptions][:data][0][:id])
 
     customer = Nurego::Customer.me
     customer[:plan_id].should_not be_nil
