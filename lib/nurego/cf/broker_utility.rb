@@ -13,7 +13,6 @@ module Nurego
         raise InvalidRequestError.new('Invalid parameter instance_id', 'instance_id') unless params['instance_id']
         create_params = { provider: PROVIDER,
                           external_subscription_id: params['instance_id'],
-                          external_ids: @external_ids,
                           plan_id: params['plan_id'],
                           skip_service_webhook: true
         }
