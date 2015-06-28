@@ -38,5 +38,17 @@ module Nurego
       Util.convert_to_nurego_object(response, api_key)
     end
 
+    # params:
+    
+    #   :trial_days => total number of trial days
+    #   :trial_months => total number of trial months
+    #   exactly one of the trial_days | trial_months attributes should be passed.
+    #   :plan_id => "plan guid" | plan guid
+    
+    def update_trial_period(params = {}, api_key = nil) 
+      response, api_key = Nurego.request(:post, url + '/update_trial_period', api_key, params)
+      Util.convert_to_nurego_object(response, api_key)
+    end
+
   end
 end

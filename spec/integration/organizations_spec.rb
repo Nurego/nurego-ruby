@@ -46,18 +46,6 @@ describe "Organizations" do
     bill["object"].should == "bill" if bill
   end
 
-  # todo: use the same method to update coupons and check results
-  it "can update organization's subscription" do
-    customer = Nurego::Customer.me
-    organization = customer.organization
-    organization[:plan] = Nurego::Plan.new(customer[:plan_id])
-    trial = Nurego::Discount.new
-    trial[:trial_days] = 123
-    organization[:trial] = trial
-#    organization[:coupon] = Nurego::Discount.new('discount_id')
-    organization.save
-  end
-
   it "can fetch the current plan" do
     customer = Nurego::Customer.me
     organization = customer.organization
@@ -89,6 +77,16 @@ describe "Organizations" do
     organization = customer.organization
     organization.cancel
     organization = customer.organization
+  end
+
+  it "can update trial period" do
+    #TODO create a plan with trial 
+    customer = Nurego::Customer.me
+    organization = customer.organization
+    plan = organization.plan    
+    expect{
+      organization.update_trial_period(trial_days: 30, plan_id: plan.id)
+      }.to raise_error(Nurego::InvalidRequestError)    
   end
 
 end
