@@ -23,8 +23,8 @@ module Nurego
       Entitlement.all(id, {:feature_id => feature_id, :external_ids => 'false' }, @api_key)
     end
 
-    def plan(params = {}, api_key = nil)
-      response, api_key = Nurego.request(:get, url + '/plan', api_key, params)
+    def subscriptions(params = {}, api_key = nil)
+      response, api_key = Nurego.request(:get, url + '/subscriptions', api_key, params)
       Util.convert_to_nurego_object(response, api_key)
     end
 
