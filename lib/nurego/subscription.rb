@@ -24,7 +24,7 @@ module Nurego
     end
 
     # Delete override
-    def delete(params={})
+    def cancel(params={})
       # use params to pass extra parameters to Nurego backend
       response, api_key = Nurego.request(:delete, url(self.organization_id), @api_key, params)
       refresh_from(response, api_key)
@@ -44,6 +44,16 @@ module Nurego
         raise InvalidRequestError.new("Could not determine which URL to request: #{self.class} instance has no ID: #{self.inspect}", 'id')
       end
       "#{self.class.url(org_id)}/#{CGI.escape(id)}"
+    end
+
+    def update(plan_id)
+      response, api_key = Nurego.request(:post, url(self.organization_id), nil, { :plan_id => plan_id })
+      Util.convert_to_nurego_object(response, api_key)
+    end
+
+    def self.update(org_id,sub_id,plan_id)
+      response, api_key = Nurego.request(:post, "#{url(org_id)}/#{CGI.escape(sub_id)}", nil, { :plan_id => plan_id })
+      Util.convert_to_nurego_object(response, api_key)
     end
 
   end

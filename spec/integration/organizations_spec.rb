@@ -64,6 +64,18 @@ describe "Organizations" do
     res["data"].should be_empty
   end
 
+
+  it "can update trial period" do
+    #TODO create a plan with trial
+    customer = Nurego::Customer.me
+    organization = customer.organization
+    #plan = organization.plan
+    plan_id = organization.subscriptions['data'][0]["plan_id"]
+    expect{
+      organization.update_trial_period(trial_days: 30, plan_id: plan_id)
+      }.to raise_error(Nurego::InvalidRequestError)
+  end
+
   # todo: this shows how to use the API, but will do nothing because by default subscriptions are not managed internally
   it "can cancel a subscription" do
     customer = Nurego::Customer.me
@@ -80,15 +92,5 @@ describe "Organizations" do
     organization = customer.organization
   end
 
-  # TODO: {omry} - fix this test
-  # it "can update trial period" do
-  #   #TODO create a plan with trial
-  #   customer = Nurego::Customer.me
-  #   organization = customer.organization
-  #   plan = organization.plan
-  #   expect{
-  #     organization.update_trial_period(trial_days: 30, plan_id: plan.id)
-  #     }.to raise_error(Nurego::InvalidRequestError)
-  # end
 
 end

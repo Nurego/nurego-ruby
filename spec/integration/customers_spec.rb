@@ -44,8 +44,14 @@ describe "Customers" do
   end
 
 
-  xit "can update the plan to different plan" do
-    # TODO : update to the different plan
+  it "can update the plan to different plan" do
+    customer = Nurego::Customer.me
+    offering = Nurego::Offering.current
+    plan_guid = offering.plans[:data][1][:id] || customer[:plan_id]
+    Nurego::Customer.update_plan(plan_guid, customer[:subscriptions][:data][0][:id])
+    customer = Nurego::Customer.me
+    customer[:subscriptions][:data][0][:plan][:id].should eq plan_guid
+
   end
 
   it "can cancel the customer account" do

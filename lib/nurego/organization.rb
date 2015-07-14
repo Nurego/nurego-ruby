@@ -15,9 +15,6 @@ module Nurego
       Bill.all({ :organization => id }, @api_key)[:bills]
     end
 
-    def self.entitlements(organization_id, params = {}, api_key = nil)
-      Entitlement.all(organization_id, {:feature_id => params[:feature_id] }, api_key)
-    end
 
     def entitlements(feature_id = nil)
       Entitlement.all(id, {:feature_id => feature_id, :external_ids => 'false' }, @api_key)
