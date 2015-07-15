@@ -54,7 +54,6 @@ describe "Broker Utility" do
     expect(payload['external_subscription_id']).to eq "#{ provision_params['instance_id'] }"
     expect(payload['provider']).to eq 'cloud-foundry'
     expect(payload['skip_service_webhook']).to eq 'true'
-    expect(payload['external_ids']).to eq 'false'
     expect(payload['plan_id']).to eq "#{ provision_params['plan_id'] }"
   end
 

@@ -50,8 +50,9 @@ describe "Organizations" do
     customer = Nurego::Customer.me
     organization = customer.organization
 
-    plan = organization.plan
-    plan["object"].should == "plan"
+    subscriptions = organization.subscriptions
+    subscriptions["data"][0]["object"].should == "subscription"
+
   end
 
   it "can fetch feature data" do
@@ -61,6 +62,18 @@ describe "Organizations" do
     res = organization.feature_data({feature_id: 'some feature id'})            
     res["object"].should == "list"
     res["data"].should be_empty
+  end
+
+
+  it "can update trial period" do
+    #TODO create a plan with trial
+    customer = Nurego::Customer.me
+    organization = customer.organization
+    #plan = organization.plan
+    plan_id = organization.subscriptions['data'][0]["plan_id"]
+    expect{
+      organization.update_trial_period(trial_days: 30, plan_id: plan_id)
+      }.to raise_error(Nurego::InvalidRequestError)
   end
 
   # todo: this shows how to use the API, but will do nothing because by default subscriptions are not managed internally
@@ -79,14 +92,5 @@ describe "Organizations" do
     organization = customer.organization
   end
 
-  it "can update trial period" do
-    #TODO create a plan with trial 
-    customer = Nurego::Customer.me
-    organization = customer.organization
-    plan = organization.plan    
-    expect{
-      organization.update_trial_period(trial_days: 30, plan_id: plan.id)
-      }.to raise_error(Nurego::InvalidRequestError)    
-  end
 
 end

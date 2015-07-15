@@ -4,11 +4,11 @@ module Nurego
       self.name.split('::')[-1]
     end
 
-    def self.url()
+    def self.url(plural = true)
       if self == APIResource
         raise NotImplementedError.new('APIResource is an abstract class.  You should perform actions on its subclasses (Customer, etc.)')
       end
-      "/v1/#{CGI.escape(class_name.downcase)}s"
+      "/v1/#{CGI.escape(class_name.downcase)}"+ (plural ? 's' : '')
     end
 
     def url
