@@ -22,6 +22,7 @@ begin
 
     #retrieve offering by dist channel & segment
     params = Hash.new
+    ### must make sure the segment guid exists in the environment where the tests are being executed on.
     params[:distribution_channel] = 'website'
     params[:segment_guid] = 'seg_7c77-8800-4fe6-9ced-6ce886ce2438'
     offering  = Nurego::Offering.current(params)

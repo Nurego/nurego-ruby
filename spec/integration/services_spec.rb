@@ -21,7 +21,7 @@ describe "Services" do
   end
 
   it "can fetch service with distribution channel" do
-    service = Nurego::Service.retrieve({ id:SERVICE_ID, distribution_channel:'website' , segment_guid:"seg_7c77-8800-4fe6-9ced-6ce886ce2438"})
+    service = Nurego::Service.retrieve({ id:SERVICE_ID, distribution_channel:'website' })
     service["object"].should == "service"
     service.offerings["object"].should == "list"
     service.offerings.each do |offering|

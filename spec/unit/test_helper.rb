@@ -40,6 +40,22 @@ def test_customer(params={})
   }.merge(params)
 end
 
+def test_service_without_offering
+  {
+      :id=> "ser_113c-4b83-4ec1-aee4-c1762801ca42",
+      :object => "service",
+      :name => "testservice",
+      :description => "testservice",
+      :service_status => "active",
+      :service_id => "testservice",
+      :webhook_type => "",
+      :provider_id => "231c0942-e896-4e7c-93bc-c1b31303792b",
+      :guid => "ser_113c-4b83-4ec1-aee4-c1762801ca42",
+      :offerings => {data:[] ,object:"list",count:0}
+  }
+
+end
+
 def test_customer_array
   (0..5).collect { test_customer }
 end
