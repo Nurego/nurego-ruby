@@ -33,7 +33,7 @@ module Nurego
         return nil if nurego_notified(params)
         raise InvalidRequestError.new('Invalid parameter instance_id', 'instance_id') unless params['instance_id']
         sub = Subscription.retrieve(params['instance_id'])
-        sub.delete({ provider: PROVIDER, skip_service_webhook: true })
+        sub.cancel({ provider: PROVIDER, skip_service_webhook: true })
       end
 
       def self.nurego_notified(params)

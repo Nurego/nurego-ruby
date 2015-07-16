@@ -52,7 +52,7 @@ describe "Subscriptions" do
     sub = create_subscription(organization, plan)
     id = sub.id
     now = Time.now
-    sub.delete
+    sub.cancel
     sub = Nurego::Subscription.retrieve(id)
     expect(Time.parse(sub.subscription_end).to_i).to be_within(60).of(now.to_i)
   end
