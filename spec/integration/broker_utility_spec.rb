@@ -48,7 +48,7 @@ describe "Broker Utility" do
     my_subs = Nurego::Customer.me.subscriptions.data
     expect(my_subs.any? { |subscription| subscription.id == sub.id }).to be_true
     expect(request[:method]).to eq :post
-    expect(request[:url]).to eq "http://localhost:31001/v1/organizations/#{ provision_params['organization_guid'] }/subscriptions"
+    expect(request[:url]).to eq "#{Nurego.api_base}/v1/organizations/#{ provision_params['organization_guid'] }/subscriptions"
     payload = {}
     request[:payload].split('&').each {|item| key,value = item.split('='); payload[key] = value;}
     expect(payload['external_subscription_id']).to eq "#{ provision_params['instance_id'] }"
@@ -80,7 +80,7 @@ describe "Broker Utility" do
     expect(orig_subs.any? { |subscription| subscription.id == sub.id }).to be_false
     expect(my_subs.find{|item| item.id == sub.id}.plan.id).to eq update_params['plan_id']
     expect(request[:method]).to eq :post
-    expect(request[:url]).to eq "http://localhost:31001/v1/organizations/#{ Nurego::Customer.me.organization.id }/subscriptions/#{ orig_subs.find{|item| !my_subs.any?{|item2| item2.id == item.id}}.id }"
+    expect(request[:url]).to eq "#{Nurego.api_base}/v1/organizations/#{ Nurego::Customer.me.organization.id }/subscriptions/#{ orig_subs.find{|item| !my_subs.any?{|item2| item2.id == item.id}}.id }"
     payload = {}
     request[:payload].split('&').each {|item| key,value = item.split('='); payload[key] = value;}
     # expect(payload['external_subscription_id']).to eq "#{ provision_params['instance_id'] }"
@@ -116,7 +116,7 @@ describe "Broker Utility" do
     expect(orig_subs.find{|item| !my_subs.any?{|item2| item2.id == item.id}}.id).to eq sub_id
     expect(request[:method]).to eq :delete
     url = request[:url].split('?')
-    expect(url[0]).to eq "http://localhost:31001/v1/organizations/#{ Nurego::Customer.me.organization.id }/subscriptions/#{ sub_id }"
+    expect(url[0]).to eq "#{Nurego.api_base}/v1/organizations/#{ Nurego::Customer.me.organization.id }/subscriptions/#{ sub_id }"
     payload = {}
     url[1].split('&').each {|item| key,value = item.split('='); payload[key] = value;}
     expect(payload['provider']).to eq 'cloud-foundry'
