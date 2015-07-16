@@ -28,17 +28,20 @@ describe "Customers" do
   it "can update the plan to the same plan" do
     customer = Nurego::Customer.me
 
-    plan_guid = customer[:plan_id]
+    subs = customer[:subscriptions][:data]
+    subs.size.should be > 0
+
+    plan_guid = subs[0][:plan][:id]
     Nurego::Customer.update_plan(plan_guid, customer[:subscriptions][:data][0][:id])
 
     customer = Nurego::Customer.me
-    customer[:plan_id].should_not be_nil
+    customer[:subscriptions][:data][0][:plan][:id].should_not be_nil
   end
 
   it "can retrieve multiple plans format" do
     customer = Nurego::Customer.me
     customer[:subscriptions].should_not be_nil
-    customer[:subscriptions].count.should eq 1
+    customer[:subscriptions].count.should be > 0
     customer[:subscriptions][:data][0].should_not be_nil
     customer[:subscriptions][:data][0][:plan][:id].should_not be_nil
   end

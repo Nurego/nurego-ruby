@@ -90,6 +90,11 @@ describe "Organizations" do
     organization = customer.organization
     organization.cancel
     organization = customer.organization
+
+    ENV['CUSTOMER_SET'] = "no"
+
+    # TODO find a way to set it w/o warning
+    EXAMPLE_EMAIL = "integration.test+#{UUIDTools::UUID.random_create.to_s}@openskymarkets.com"
   end
 
 
