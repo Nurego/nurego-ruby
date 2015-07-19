@@ -71,9 +71,18 @@ describe "Organizations" do
     organization = customer.organization
     #plan = organization.plan
     plan_id = organization.subscriptions['data'][0]["plan_id"]
-    expect{
-      organization.update_trial_period(trial_days: 30, plan_id: plan_id)
+    offering = Nurego::Offering.current
+    plan = offering[:plans].find { |plan| plan[:id]==plan_id}
+    has_trial = plan[:discounts][:data].find { |discount| discount[:discount_type]=='trial'}
+    if has_trial
+      expect{
+        organization.update_trial_period(trial_days: 30, plan_id: plan_id)
+      }.to_not raise_error()
+    else
+      expect{
+        organization.update_trial_period(trial_days: 30, plan_id: plan_id)
       }.to raise_error(Nurego::InvalidRequestError)
+    end
   end
 
   # todo: this shows how to use the API, but will do nothing because by default subscriptions are not managed internally
