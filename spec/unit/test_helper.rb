@@ -56,6 +56,14 @@ def test_service_without_offering
 
 end
 
+def test_service_plans
+  {
+      data:[] ,
+      object:"list",
+      count:0
+  }
+end
+
 def test_customer_array
   (0..5).collect { test_customer }
 end

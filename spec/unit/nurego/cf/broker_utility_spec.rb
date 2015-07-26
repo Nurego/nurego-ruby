@@ -8,7 +8,8 @@ describe Nurego::Cf::BrokerUtility do
   end
 
   it "can parse service offering to cloud foundry catalog" do
-    @mock.should_receive(:get).and_return(test_response(test_service_without_offering))
+    @mock.should_receive(:get).with(/(.*)\/services\/(.*)/,anything(),anything()).and_return(test_response(test_service_without_offering))
+    @mock.should_receive(:get).with(/(.*)\/services\/(.*)\/plans/,anything(),anything()).and_return(test_response(test_service_plans))
     offer_as_catalog = Nurego::Cf::BrokerUtility.get_service_catalog("testservice")
     response_json = JSON.parse offer_as_catalog
 
@@ -32,7 +33,7 @@ describe Nurego::Cf::BrokerUtility do
         expect(plan.keys).to include("id")
         expect(plan.keys).to include("name")
         expect(plan.keys).to include("description")
-        expect(plan['description']).not_to be_nil
+        expect(plan['description']).to match /[^\s]/
       end
     end
   end
