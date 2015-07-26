@@ -42,12 +42,13 @@ module Nurego
 
       def self.get_service_catalog(service_id)
         service = Service.retrieve(service_id)
-        service_to_cloud_foundry_catalog(service)
+        plans = service.plans
+        service_to_cloud_foundry_catalog(service, plans)
       end
 
       private
 
-      def self.service_to_cloud_foundry_catalog(service)
+      def self.service_to_cloud_foundry_catalog(service, plans)
         cf_catalog = { services: [] }
         cf_service = {
             # required
@@ -65,28 +66,23 @@ module Nurego
             # dashboard_client: Object {id,secret,redirect_uri}
 
         }
-        if service.offerings.first
-          cf_catalog.merge!({ offer_id: service.offerings.first['id'],
-                              offer_name: service.offerings.first['name'],
-                              offer_description: service.offerings.first['description'] })
-          service.offerings.first['plans']['data'].each do | nurego_plan |
-            cf_plan = {
-                # required
-                id: nurego_plan['id'],
-                name: nurego_plan['name'],
-                description: nurego_plan['description'] || " ",
+        plans.each do | nurego_plan |
+          cf_plan = {
+            # required
+            id: nurego_plan['id'],
+            name: nurego_plan['name'],
+            description: nurego_plan['description'] || nurego_plan['name'],
 
-                ## possible
-                # metadata: Object,
-                # free: true,
-            }
+            ## possible
+            # metadata: Object,
+            # free: true,
+          }
 
 
-            recurring = nurego_plan['features']['data'].find { | feature | feature['element_type'] == 'recurring' }
-            cf_plan[:free] = !(recurring && recurring['price'] > 0)
+          recurring = nurego_plan['features']['data'].find { | feature | feature['element_type'] == 'recurring' }
+          cf_plan[:free] = !(recurring && recurring['price'] > 0)
 
-            cf_service[:plans] << cf_plan # Add plans to the service
-          end
+          cf_service[:plans] << cf_plan # Add plans to the service
         end
         cf_catalog[:services] << cf_service # Add service to offer
 

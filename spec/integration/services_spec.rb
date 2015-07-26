@@ -35,4 +35,19 @@ describe "Services" do
     end
   end
 
+  it "can fetch service plans" do
+    service = Nurego::Service.retrieve(SERVICE_ID)
+    plans = service.plans
+    plans['object'].should == "list"
+    plans['count'].should be >0
+    plans['data'].should be_a_kind_of(Array)
+    plans['data'].size.should eq plans["count"]
+    plans['data'].each do |plan|
+      plan["object"].should == "plan"
+      plan.features.each do |feature|
+        feature["object"].should == "feature"
+      end
+    end
+  end
+
 end
