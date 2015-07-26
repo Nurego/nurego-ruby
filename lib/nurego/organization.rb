@@ -15,13 +15,17 @@ module Nurego
       Bill.all({ :organization => id }, @api_key)[:bills]
     end
 
-
     def entitlements(feature_id = nil)
       Entitlement.all(id, {:feature_id => feature_id, :external_ids => 'false' }, @api_key)
     end
 
     def subscriptions(params = {}, api_key = nil)
       response, api_key = Nurego.request(:get, url + '/subscriptions', api_key, params)
+      Util.convert_to_nurego_object(response, api_key)
+    end
+
+    def users(params = {}, api_key = nil)
+      response, api_key = Nurego.request(:get, url + '/users', api_key, params)
       Util.convert_to_nurego_object(response, api_key)
     end
 

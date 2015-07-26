@@ -41,6 +41,7 @@ require 'nurego/legal_doc'
 require 'nurego/extensions'
 require 'nurego/subscription'
 require 'nurego/cf/broker_utility'
+require 'nurego/user'
 
 
 # Errors
