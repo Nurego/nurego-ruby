@@ -11,9 +11,5 @@ module Nurego
       Util.convert_to_nurego_object(response, api_key)
     end
 
-    def plans
-      Plan.all({:offering => id }, @api_key)
-    end
-
   end
 end
