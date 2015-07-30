@@ -54,6 +54,6 @@ describe "Subscriptions" do
     now = Time.now
     sub.cancel
     sub = Nurego::Subscription.retrieve(id)
-    expect(Time.parse(sub.subscription_end).to_i).to be_within(60).of(now.to_i)
+    expect(Time.parse(sub.subscription_end).to_i).to be_within(100).of(now.to_i)
   end
 end
