@@ -17,7 +17,7 @@ module Nurego
 
     def self.object_classes
       @object_classes ||= {
-        #TODO: {omry} - find out how to add categoryto the object classes.
+        #TODO: {omry} - find out how to add category to the object classes.
         'catalog' => Catalog,
         'entitlement' => Entitlement,
         'customer' => Customer,
@@ -34,6 +34,7 @@ module Nurego
         'paymentmethod' => PaymentMethod,
         'bill' => Bill,
         'discount' => Discount,
+        'user' => User,
         'list' => ListObject
       }
     end
