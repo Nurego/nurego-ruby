@@ -47,12 +47,12 @@ module Nurego
     end
 
     def update(plan_id)
-      response, api_key = Nurego.request(:post, url(self.organization_id), nil, { :plan_id => plan_id })
+      response, api_key = Nurego.request(:put, url(self.organization_id), nil, { :plan_id => plan_id })
       Util.convert_to_nurego_object(response, api_key)
     end
 
     def self.update(org_id,sub_id,plan_id)
-      response, api_key = Nurego.request(:post, "#{url(org_id)}/#{CGI.escape(sub_id)}", nil, { :plan_id => plan_id })
+      response, api_key = Nurego.request(:put, "#{url(org_id)}/#{CGI.escape(sub_id)}", nil, { :plan_id => plan_id })
       Util.convert_to_nurego_object(response, api_key)
     end
 
