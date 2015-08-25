@@ -3,7 +3,15 @@ module Nurego
     include Nurego::APIOperations::List
     include Nurego::APIOperations::Create
 
-    def self.set_usage(organization_id, feature_id, amount)
+    def self.set_usage(subscription_id, feature_id, amount)
+      payload = {
+          feature_id: feature_id,
+          amount: amount,
+      }
+      response, api_key = Nurego.request(:post, "/v1/subscriptions/#{subscription_id}/entitlements/usage", nil, payload)
+    end
+
+    def self.set_usage_by_organization(organization_id, feature_id, amount)
       payload = {
           feature_id: feature_id,
           amount: amount,
@@ -11,7 +19,12 @@ module Nurego
       response, api_key = Nurego.request(:post, "/v1/organizations/#{organization_id}/entitlements/usage", nil, payload)
     end
 
-    def self.all(organization_id, filters={}, api_key=nil)
+    def self.all(subscription_id, filters={}, api_key=nil)
+      response, api_key = Nurego.request(:get, "/v1/subscriptions/#{subscription_id}/entitlements", api_key, filters)
+      Util.convert_to_nurego_object(response, api_key)
+    end
+
+    def self.all_by_organization(organization_id, filters={}, api_key=nil)
       response, api_key = Nurego.request(:get, "/v1/organizations/#{organization_id}/entitlements", api_key, filters)
       Util.convert_to_nurego_object(response, api_key)
     end
