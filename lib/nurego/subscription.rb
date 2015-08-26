@@ -56,5 +56,9 @@ module Nurego
       Util.convert_to_nurego_object(response, api_key)
     end
 
+    def entitlements(feature_id = nil)
+      Entitlement.all(id, {:feature_id => feature_id}, @api_key)
+    end
+
   end
 end

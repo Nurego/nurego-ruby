@@ -16,7 +16,7 @@ module Nurego
     end
 
     def entitlements(feature_id = nil)
-      Entitlement.all(id, {:feature_id => feature_id, :external_ids => 'false' }, @api_key)
+      Entitlement.all_by_organization(id, {:feature_id => feature_id}, @api_key)
     end
 
     def subscriptions(params = {}, api_key = nil)

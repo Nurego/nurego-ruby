@@ -42,9 +42,6 @@ begin
     org = Nurego::Organization.retrieve(org_id)
     puts "Retrieve an organization by guid:\n" , org , "\n"
 
-    entitlements = Nurego::Entitlement.all(org_id)
-    puts "Retrieve entitlements by organization guid\n" , entitlements, "\n"
-
     #create a new subscription
     params = {}
     params[:plan_id] = current_offering.plans[:data][2][:id]
@@ -59,16 +56,17 @@ begin
     updatedsub = Nurego::Subscription.update(org_id,sub.id,newplan)
     puts "The Customer subscription (notice the plan update):\n", Nurego::Customer.me.subscriptions , "\n"
 
-    #cancel subscription
-    updatedsub.cancel
-    puts "The Customer subscription (notice end date:\n", Nurego::Customer.me.subscriptions , "\n"
+    entitlements = Nurego::Entitlement.all(updatedsub.id)
+    puts "Retrieve entitlements by subscription guid\n" , entitlements, "\n"
 
     # update usage
     entitlement = org.entitlements.first
-    Nurego::Entitlement.set_usage(org_id,entitlement.id, 13)
-    puts "Notice the usage of #{entitlement.id} is now set to 13:\n", Nurego::Organization.retrieve(org_id).entitlements.first, "\n"
+    Nurego::Entitlement.set_usage(updatedsub.id,entitlement.id, 13)
+    puts "Notice the usage of #{entitlement.id} is now set to 13:\n", Nurego::Subscription.retrieve(updatedsub.id).entitlements.first, "\n"
 
-
+    #cancel subscription
+    updatedsub.cancel
+    puts "The Customer subscription (notice end date:\n", Nurego::Customer.me.subscriptions , "\n"
 
   end
 
