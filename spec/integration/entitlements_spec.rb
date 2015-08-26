@@ -7,7 +7,7 @@ describe "Entitlements" do
     Nurego.external_ids = false
   end
 
-  it "can fetch the entitlement" do
+  it "can fetch the entitlement by organization" do
     # TODO Create real entitlements here
     # TODO 2: test using external ids too
 
@@ -16,17 +16,36 @@ describe "Entitlements" do
 
     customers_ent = organization.entitlements('subscribers')
 
-    feature_id = customers_ent[:data][0][:id]
-    max_amount = customers_ent[:data][0][:max_allowed_amount]
+    feature_id = customers_ent[:data][0][:feature_id]
 
-    Nurego::Entitlement.set_usage(organization.id,feature_id,6)
+    Nurego::Entitlement.set_usage_by_organization(organization.id, feature_id, 6)
 
-    allowed =  organization.entitlements(feature_id)
+    ents =  organization.entitlements(feature_id)
 
-    expect(allowed[:data][0][:max_allowed_amount] >= allowed[:data][0][:current_used_amount] + 1).to eq true
-    expect(allowed[:data][0][:current_used_amount]).to eq 6
-    expect(allowed[:data][0][:max_allowed_amount]).to eq max_amount
+    expect(ents[:data][0][:max_allowed_amount]).to be_nil
+    expect(ents[:data][0][:current_used_amount]).to eq 6
 
-    all = Nurego::Entitlement.all(organization[:id], {}, Nurego.api_key)
+    all = Nurego::Entitlement.all_by_organization(organization[:id], {}, Nurego.api_key)
+  end
+
+  it "can fetch the entitlement by subscription" do
+    # TODO Create real entitlements here
+    # TODO 2: test using external ids too
+
+    customer = Nurego::Customer.me
+    subscription = customer.subscriptions.data[0]
+
+    customers_ent = subscription.entitlements('subscribers')
+
+    feature_id = customers_ent[:data][0][:feature_id]
+
+    Nurego::Entitlement.set_usage(subscription.id, feature_id, 6)
+
+    ents =  subscription.entitlements(feature_id)
+
+    expect(ents[:data][0][:max_allowed_amount]).to be_nil
+    expect(ents[:data][0][:current_used_amount]).to eq 6
+
+    all = Nurego::Entitlement.all(subscription[:id], {}, Nurego.api_key)
   end
 end
