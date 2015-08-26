@@ -5,9 +5,6 @@ begin
     setup_login_and_login(true)
     @email = "integration.test+#{UUIDTools::UUID.random_create.to_s}@openskymarkets.com"
 
-
-
-
     # retrieve catalog
     catalog  = Nurego::Catalog.retrieve()
     puts "Retrieve a catalog:\n" ,catalog[:data]
@@ -60,7 +57,7 @@ begin
     puts "Retrieve entitlements by subscription guid\n" , entitlements, "\n"
 
     # update usage
-    entitlement = org.entitlements.first
+    entitlement = updatedsub.entitlements.first
     Nurego::Entitlement.set_usage(updatedsub.id,entitlement.id, 13)
     puts "Notice the usage of #{entitlement.id} is now set to 13:\n", Nurego::Subscription.retrieve(updatedsub.id).entitlements.first, "\n"
 
