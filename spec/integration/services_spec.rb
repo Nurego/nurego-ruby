@@ -36,6 +36,7 @@ describe "Services" do
   end
 
   it "can fetch service plans" do
+    setup_nurego_lib(true, false) # no_register = true + public_key = false
     service = Nurego::Service.retrieve(SERVICE_ID)
     plans = service.plans
     plans['object'].should == "list"

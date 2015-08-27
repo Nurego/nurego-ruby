@@ -17,7 +17,7 @@ module Nurego
       if values.length > 0
         values.delete(:id)
 
-        response, api_key = Nurego.request(:post, url(self.organization_id), @api_key, values)
+        response, api_key = Nurego.request(:put, url(self.organization_id), @api_key, values)
         refresh_from(response, api_key)
       end
       self

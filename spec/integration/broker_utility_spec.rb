@@ -79,7 +79,7 @@ describe "Broker Utility" do
     expect(my_subs.any? { |subscription| subscription.id == sub.id }).to be_true
     expect(orig_subs.any? { |subscription| subscription.id == sub.id }).to be_false
     expect(my_subs.find{|item| item.id == sub.id}.plan.id).to eq update_params['plan_id']
-    expect(request[:method]).to eq :post
+    expect(request[:method]).to eq :put
     expect(request[:url]).to eq "#{Nurego.api_base}/v1/organizations/#{ Nurego::Customer.me.organization.id }/subscriptions/#{ orig_subs.find{|item| !my_subs.any?{|item2| item2.id == item.id}}.id }"
     payload = {}
     request[:payload].split('&').each {|item| key,value = item.split('='); payload[key] = value;}
