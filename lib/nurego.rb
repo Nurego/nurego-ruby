@@ -42,6 +42,7 @@ require 'nurego/extensions'
 require 'nurego/subscription'
 require 'nurego/cf/broker_utility'
 require 'nurego/user'
+require 'nurego/account'
 
 
 # Errors
@@ -103,7 +104,7 @@ module Nurego
       url += "#{URI.parse(url).query ? '&' : '?'}#{uri_encode(params)}" if params && params.any?
       payload = nil
     else
-      payload = uri_encode(params)
+      payload = params.to_json
     end
     request_opts.update(:headers => request_headers(api_key).update(headers),
                         :method => method, :open_timeout => 30,
@@ -182,7 +183,7 @@ module Nurego
     headers = {
       :user_agent => "Nurego/v1 RubyBindings/#{Nurego::VERSION}",
       :x_nurego_authorization => "Bearer #{api_key}",
-      :content_type => 'application/x-www-form-urlencoded'
+      :content_type => 'application/json'
     }
 
     headers[:nurego_version] = api_version if api_version

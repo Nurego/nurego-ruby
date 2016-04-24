@@ -13,6 +13,17 @@ module Nurego
         self
       end
 
+      def update
+        values = serialize_params(self)
+
+        if values.length > 0
+          values.delete(:id)
+
+          response, api_key = Nurego.request(:put, url, @api_key, values)
+          refresh_from(response, api_key)
+        end
+        self
+      end
 
       def serialize_params(obj, force = false)
         case obj

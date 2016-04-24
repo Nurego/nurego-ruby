@@ -35,7 +35,8 @@ module Nurego
         'bill' => Bill,
         'discount' => Discount,
         'user' => User,
-        'list' => ListObject
+        'list' => ListObject,
+        'account' => Account
       }
     end
 
