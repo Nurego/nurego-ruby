@@ -15,8 +15,8 @@ describe "PaymentMethods" do
     Nurego::PaymentMethod.create({   organization: organization["id"],
                                      payment_method: "cc",
                                      last4: "1234",
-                                     exp_month: '5',
-                                     exp_year: '2017',
+                                     exp_month: 5,
+                                     exp_year: 2017,
                                      cc_token: "1234",
                                  })
 
