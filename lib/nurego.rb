@@ -104,7 +104,7 @@ module Nurego
       url += "#{URI.parse(url).query ? '&' : '?'}#{uri_encode(params)}" if params && params.any?
       payload = nil
     else
-      payload = params.to_json
+      payload = Nurego::JSON.dump(params)
     end
     request_opts.update(:headers => request_headers(api_key).update(headers),
                         :method => method, :open_timeout => 30,

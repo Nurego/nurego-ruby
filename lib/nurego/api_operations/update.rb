@@ -1,28 +1,20 @@
 module Nurego
   module APIOperations
     module Update
-      def save
+      def save(request_type = 'post')
         values = serialize_params(self)
 
         if values.length > 0
           values.delete(:id)
 
-          response, api_key = Nurego.request(:post, url, @api_key, values)
+          response, api_key = Nurego.request(request_type.to_sym, url, @api_key, values)
           refresh_from(response, api_key)
         end
         self
       end
 
       def update
-        values = serialize_params(self)
-
-        if values.length > 0
-          values.delete(:id)
-
-          response, api_key = Nurego.request(:put, url, @api_key, values)
-          refresh_from(response, api_key)
-        end
-        self
+        self.save('put')
       end
 
       def serialize_params(obj, force = false)

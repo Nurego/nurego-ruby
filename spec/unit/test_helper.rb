@@ -1,5 +1,5 @@
 require 'nurego'
-require 'minitest/unit'
+#require 'minitest/unit'
 require 'stringio'
 
 #monkeypatch request methods
