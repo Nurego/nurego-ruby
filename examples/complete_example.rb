@@ -21,7 +21,7 @@ begin
     params = Hash.new
     ### must make sure the segment guid exists in the environment where the tests are being executed on.
     params[:distribution_channel] = 'website'
-    params[:segment_guid] = 'seg_7c77-8800-4fe6-9ced-6ce886ce2438'
+    #params[:segment_guid] = 'seg_7c77-8800-4fe6-9ced-6ce886ce2438'
     offering  = Nurego::Offering.current(params)
     puts "Retrieve an offering:\n" , offering , "\n"
 
@@ -41,7 +41,7 @@ begin
 
     #create a new subscription
     params = {}
-    params[:plan_id] = current_offering.plans[:data][2][:id]
+    params[:plan_id] = current_offering.plans[:data][0][:id]
     sub = Nurego::Subscription.create(org_id, params)
 
     puts "The newly creation subscription:\n" , sub, "\n"
@@ -49,7 +49,7 @@ begin
 
 
     #update subscription plan
-    newplan = current_offering.plans[:data][3][:id]
+    newplan = current_offering.plans[:data][0][:id]
     updatedsub = Nurego::Subscription.update(org_id,sub.id,newplan)
     puts "The Customer subscription (notice the plan update):\n", Nurego::Customer.me.subscriptions , "\n"
 
@@ -58,8 +58,8 @@ begin
 
     # update usage
     entitlement = updatedsub.entitlements.first
-    Nurego::Entitlement.set_usage(updatedsub.id,entitlement.id, 13)
-    puts "Notice the usage of #{entitlement.id} is now set to 13:\n", Nurego::Subscription.retrieve(updatedsub.id).entitlements.first, "\n"
+    Nurego::Entitlement.set_usage(updatedsub.id,entitlement.feature_id, 13)
+    puts "Notice the usage of #{entitlement.feature_id} is now set to 13:\n", Nurego::Subscription.retrieve(updatedsub.id).entitlements.first, "\n"
 
     #cancel subscription
     updatedsub.cancel

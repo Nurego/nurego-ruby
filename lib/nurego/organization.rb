@@ -2,11 +2,11 @@ module Nurego
   class Organization < APIResource
     include Nurego::APIOperations::List
     include Nurego::APIOperations::Update
-
+=begin
     def instances
       Instance.all({:organization => id }, @api_key)
     end
-
+=end
     def paymentmethod
       PaymentMethod.all({:organization => id}, @api_key)
     end
