@@ -39,6 +39,10 @@ module Nurego
       Util.convert_to_nurego_object(response, api_key)
     end
 
+    def account
+      Nurego::Account.retrieve(id: self[:account_no])
+    end
+
     # params:
     
     #   :trial_days => total number of trial days
