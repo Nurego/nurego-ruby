@@ -6,7 +6,7 @@ describe "Organizations" do
     setup_login_and_login
   end
 
-  it "can retrieve instances" do
+  xit "can retrieve instances" do
     customer = Nurego::Customer.me
     organization = customer.organization
     instances = organization.instances

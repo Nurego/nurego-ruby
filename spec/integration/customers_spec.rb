@@ -25,7 +25,7 @@ describe "Customers" do
     organization["object"].should == "organization"
   end
 
-  it "can update the plan to the same plan" do
+  xit "can update the plan to the same plan" do
     customer = Nurego::Customer.me
 
     subs = customer[:subscriptions][:data]
@@ -47,7 +47,7 @@ describe "Customers" do
   end
 
 
-  it "can update the plan to different plan" do
+  xit "can update the plan to different plan" do
     customer = Nurego::Customer.me
     offering = Nurego::Offering.current
     plan_guid = offering.plans[:data][1][:id] || customer[:plan_id]

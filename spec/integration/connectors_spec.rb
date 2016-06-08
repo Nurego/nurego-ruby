@@ -6,7 +6,7 @@ describe "Connectors" do
     setup_login_and_login
   end
 
-  it "can list connectors" do
+  xit "can list connectors" do
     customer = Nurego::Customer.me
     organization = customer.organization
     puts "#{organization.inspect}"
