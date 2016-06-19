@@ -7,7 +7,7 @@ describe "Accounts" do
   end
 
   it "can retrieve account by accout no" do
-    account1 = Nurego::Customer.me.organization.account
+    account1 = Nurego::Customer.retrieve(@uaa_user_id).organization.account
     expect(account1["object"]).to eq "account"
     account2 = Nurego::Account.retrieve(account1[:account_no])
     expect(account2["object"]).to eq "account"
@@ -15,16 +15,16 @@ describe "Accounts" do
   end
 
   it "can update account name" do
-    account = Nurego::Customer.me.organization.account
+    account = Nurego::Customer.retrieve(@uaa_user_id).organization.account
     expect(account.name).not_to eq 'new name'
     account[:name] = 'new name'
     account.update
-    account = Nurego::Customer.me.organization.account
+    account = Nurego::Customer.retrieve(@uaa_user_id).organization.account
     expect(account.name).to eq 'new name'
   end
 
   it "can update account bill to contact" do
-    account = Nurego::Customer.me.organization.account
+    account = Nurego::Customer.retrieve(@uaa_user_id).organization.account
     expect(account[:bill_to_contact]).to eq nil
     bill_to_contact = {
         address: 'address1',
@@ -40,7 +40,7 @@ describe "Accounts" do
     }
     account[:bill_to_contact] = bill_to_contact
     account.update
-    account = Nurego::Customer.me.organization.account
+    account = Nurego::Customer.retrieve(@uaa_user_id).organization.account
     expect(account.bill_to_contact).not_to eq nil
   end
 end

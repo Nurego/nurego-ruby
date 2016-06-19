@@ -7,7 +7,7 @@ describe "Instances" do
   end
 
   xit "can retrieve instances" do
-    customer = Nurego::Customer.me
+    customer = Nurego::Customer.retrieve(@uaa_user_id)
     organization = customer.organization
     instances = organization.instances
     instances.count.should == 2
@@ -19,7 +19,7 @@ describe "Instances" do
   xit "can retrieve connectors" do
     # PENDING on connector fix
     # TODO create real connector and fetch it
-    customer = Nurego::Customer.me
+    customer = Nurego::Customer.retrieve(@uaa_user_id)
     organization = customer.organization
     instances = organization.instances
     instances.count.should == 2

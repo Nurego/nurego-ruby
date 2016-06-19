@@ -9,7 +9,7 @@ describe "PaymentMethods" do
   it "can create a payment method" do
     # TODO: make the real token here
 
-    customer = Nurego::Customer.me
+    customer = Nurego::Customer.retrieve(@uaa_user_id)
     organization = customer.organization
 
     Nurego::PaymentMethod.create({   organization: organization["id"],

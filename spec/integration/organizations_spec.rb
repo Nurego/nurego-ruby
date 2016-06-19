@@ -7,7 +7,7 @@ describe "Organizations" do
   end
 
   xit "can retrieve instances" do
-    customer = Nurego::Customer.me
+    customer = Nurego::Customer.retrieve(@uaa_user_id)
     organization = customer.organization
     instances = organization.instances
     instances.count.should == 2
@@ -17,12 +17,12 @@ describe "Organizations" do
   end
 
   it "can update org name" do
-    customer = Nurego::Customer.me
+    customer = Nurego::Customer.retrieve(@uaa_user_id)
     organization = customer.organization
     organization.name.should_not eq 'new name'
     organization[:name] = 'new name'
     organization.save
-    customer = Nurego::Customer.me
+    customer = Nurego::Customer.retrieve(@uaa_user_id)
     organization = customer.organization
     organization.name.should eq 'new name'
   end
@@ -30,7 +30,7 @@ describe "Organizations" do
   it "can retrieve payment method" do
     # TODO create a real payment method here
 
-    customer = Nurego::Customer.me
+    customer = Nurego::Customer.retrieve(@uaa_user_id)
     organization = customer.organization
     paymentmethod = organization.paymentmethod
     paymentmethod["object"].should == "paymentmethod"
@@ -39,7 +39,7 @@ describe "Organizations" do
   it "can retrieve the bill" do
     # TODO create a real bill
 
-    customer = Nurego::Customer.me
+    customer = Nurego::Customer.retrieve(@uaa_user_id)
     organization = customer.organization
     bills = organization.bills
     bill = Nurego::Bill.retrieve(id: bills[:data][0][:id]) if bills[:count] > 0
@@ -47,7 +47,7 @@ describe "Organizations" do
   end
 
   it "can fetch the current plan" do
-    customer = Nurego::Customer.me
+    customer = Nurego::Customer.retrieve(@uaa_user_id)
     organization = customer.organization
 
     subscriptions = organization.subscriptions
@@ -56,7 +56,7 @@ describe "Organizations" do
   end
 
   it "can fetch feature data" do
-    customer = Nurego::Customer.me
+    customer = Nurego::Customer.retrieve(@uaa_user_id)
     organization = customer.organization
 
     res = organization.feature_data({feature_id: 'some feature id'})            
@@ -67,7 +67,7 @@ describe "Organizations" do
 
   it "can update trial period" do
     #TODO create a plan with trial
-    customer = Nurego::Customer.me
+    customer = Nurego::Customer.retrieve(@uaa_user_id)
     organization = customer.organization
     #plan = organization.plan
     plan_id = organization.subscriptions['data'][0]["plan_id"]
@@ -87,7 +87,7 @@ describe "Organizations" do
 
   # todo: this shows how to use the API, but will do nothing because by default subscriptions are not managed internally
   it "can cancel a subscription" do
-    customer = Nurego::Customer.me
+    customer = Nurego::Customer.retrieve(@uaa_user_id)
     organization = customer.organization
     organization.cancel({ :plan => { :id => customer[:plan_id]} })
     organization = customer.organization
@@ -95,7 +95,7 @@ describe "Organizations" do
 
   # todo: this shows how to use the API, but will do nothing because by default subscriptions are not managed internally
   it "can cancel an account" do
-    customer = Nurego::Customer.me
+    customer = Nurego::Customer.retrieve(@uaa_user_id)
     organization = customer.organization
     organization.cancel
     organization = customer.organization

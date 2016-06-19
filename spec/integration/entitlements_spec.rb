@@ -11,7 +11,7 @@ describe "Entitlements" do
     # TODO Create real entitlements here
     # TODO 2: test using external ids too
 
-    customer = Nurego::Customer.me
+    customer = Nurego::Customer.retrieve(@uaa_user_id)
     organization = customer.organization
 
     customers_ent = organization.entitlements('subscribers')
@@ -32,7 +32,7 @@ describe "Entitlements" do
     # TODO Create real entitlements here
     # TODO 2: test using external ids too
 
-    customer = Nurego::Customer.me
+    customer = Nurego::Customer.retrieve(@uaa_user_id)
     subscription = customer.subscriptions.data[0]
 
     customers_ent = subscription.entitlements('subscribers')

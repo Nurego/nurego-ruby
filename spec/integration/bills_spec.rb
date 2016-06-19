@@ -7,7 +7,7 @@ describe "Bills" do
   end
 
   it "can fetch the bills form customer with no bill" do
-    customer = Nurego::Customer.me
+    customer = Nurego::Customer.retrieve(@uaa_user_id)
     organization = customer.organization
     bills = organization.bills
     bills["object"].should == "list"
