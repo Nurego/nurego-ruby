@@ -27,6 +27,7 @@ module Nurego
       rescue CF::UAA::NotFound, CF::UAA::TargetError => e
         raise UserNotFoundError.new('User not found') # TODO better error message
       rescue CF::UAA::AuthError, CF::UAA::BadResponse => e
+        raise InvalidRequestError.new("using old password", user_id) if e.message == "invalid status response: 422"
         raise AuthenticationError.new('OAuth authentication failed ' +
                                           'Make sure you set "Nurego.client_id = <client_id>". ' +
                                           'Please also make sure you set "Nurego.client_secret = <client secret>". ' +
@@ -38,7 +39,7 @@ module Nurego
       def set_header_token(token)
         @header_token = token
       end
-      
+
       private
       def fetch_access_info(username, password)
         token = token_issuer.owner_password_grant(username, password)
@@ -113,4 +114,3 @@ module Nurego
     end
   end
 end
-
