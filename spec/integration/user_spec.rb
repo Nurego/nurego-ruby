@@ -12,7 +12,7 @@ describe "Users" do
   end
 
   it "can add a user" do
-    organization = Nurego::Customer.me.organization
+    organization = Nurego::Customer.retrieve(@uaa_user_id).organization
     current_users = Nurego::User.all(organization.id)
     create_params = { password: EXAMPLE_PASSWORD, email: @email }
     user = Nurego::User.create(organization.id, create_params)
@@ -24,7 +24,7 @@ describe "Users" do
   end
 
   it "can retrieve users" do
-    organization = Nurego::Customer.me.organization
+    organization = Nurego::Customer.retrieve(@uaa_user_id).organization
 
     current_users = Nurego::User.all(organization.id)
 
@@ -43,7 +43,7 @@ describe "Users" do
 
   it "can delete a user" do
     plan = Nurego::Offering.current.plans.first
-    organization = Nurego::Customer.me.organization
+    organization = Nurego::Customer.retrieve(@uaa_user_id).organization
     user = Nurego::User.create(organization.id, {email: @email, password: "1"})
     user.cancel()
 

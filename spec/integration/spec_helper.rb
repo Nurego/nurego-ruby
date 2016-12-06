@@ -22,6 +22,7 @@ def setup_login_and_login(no_login = false)
   Nurego::Auth.provider_site = ENV['UAA_URL'] || "http://localhost:8080/uaa"
 
   Nurego::Auth.login(EXAMPLE_EMAIL, EXAMPLE_PASSWORD) unless no_login
+  @uaa_user_id = ENV['UAA_USER_ID']
 end
 
 def register
@@ -30,5 +31,6 @@ def register
   Nurego::Auth.logout
   registration = Nurego::Registration.create({email: EXAMPLE_EMAIL})
   customer = registration.complete(id: registration.id, password: EXAMPLE_PASSWORD)
+  ENV['UAA_USER_ID'] = customer['id']
   ENV['CUSTOMER_SET'] = (customer["email"] == EXAMPLE_EMAIL && customer["object"] == "customer") ? "yes" : "no"
 end

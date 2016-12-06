@@ -7,7 +7,7 @@ describe "Connectors" do
   end
 
   xit "can list connectors" do
-    customer = Nurego::Customer.me
+    customer = Nurego::Customer.retrieve(@uaa_user_id)
     organization = customer.organization
     puts "#{organization.inspect}"
     instances = organization.instances

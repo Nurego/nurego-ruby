@@ -32,7 +32,7 @@ begin
 
     #retrieve logged in user
     Nurego::Auth.login(customer["email"], EXAMPLE_PASSWORD)
-    retrieved_customer = Nurego::Customer.me
+    retrieved_customer = Nurego::Customer.retrieve(customer[:id])
     puts "Retrieve customer details:\n" , retrieved_customer , "\n"
 
     org_id = retrieved_customer.organization_id
@@ -45,13 +45,13 @@ begin
     sub = Nurego::Subscription.create(org_id, params)
 
     puts "The newly creation subscription:\n" , sub, "\n"
-    puts "The Customer subscription:\n", Nurego::Customer.me.subscriptions , "\n"
+    puts "The Customer subscription:\n", Nurego::Customer.retrieve(customer[:id]).subscriptions , "\n"
 
 
     #update subscription plan
     newplan = current_offering.plans[:data][0][:id]
     updatedsub = Nurego::Subscription.update(org_id,sub.id,newplan)
-    puts "The Customer subscription (notice the plan update):\n", Nurego::Customer.me.subscriptions , "\n"
+    puts "The Customer subscription (notice the plan update):\n", Nurego::Customer.retrieve(customer[:id]).subscriptions , "\n"
 
     entitlements = Nurego::Entitlement.all(updatedsub.id)
     puts "Retrieve entitlements by subscription guid\n" , entitlements, "\n"
@@ -63,7 +63,7 @@ begin
 
     #cancel subscription
     updatedsub.cancel
-    puts "The Customer subscription (notice end date:\n", Nurego::Customer.me.subscriptions , "\n"
+    puts "The Customer subscription (notice end date:\n", Nurego::Customer.retrieve(customer[:id]).subscriptions , "\n"
 
   end
 

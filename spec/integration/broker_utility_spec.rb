@@ -14,14 +14,14 @@ describe "Broker Utility" do
         'nurego_notified' => true,
         'instance_id' => @test_instance_id,
         'plan_id' => Nurego::Offering.current.plans.first.id,
-        'organization_guid' => Nurego::Customer.me.organization.id,
+        'organization_guid' => Nurego::Customer.retrieve(@uaa_user_id).organization.id,
         'service_id' => 'some_service_id',
         'space_guid' => 'some_space_guid'
     }
-    current_subscriptions = Nurego::Customer.me.subscriptions.data
+    current_subscriptions = Nurego::Customer.retrieve(@uaa_user_id).subscriptions.data
     sub = Nurego::Cf::BrokerUtility.provision(provision_params)
     expect(sub).to be_nil
-    my_subs = Nurego::Customer.me.subscriptions.data
+    my_subs = Nurego::Customer.retrieve(@uaa_user_id).subscriptions.data
     expect(my_subs.count).to eq current_subscriptions.count
   end
 
@@ -36,7 +36,7 @@ describe "Broker Utility" do
     provision_params = {
         'instance_id' => @test_instance_id,
         'plan_id' => Nurego::Offering.current.plans.first.id,
-        'organization_guid' => Nurego::Customer.me.organization.id,
+        'organization_guid' => Nurego::Customer.retrieve(@uaa_user_id).organization.id,
         'service_id' => 'some_service_id',
         'space_guid' => 'some_space_guid'
     }
@@ -45,7 +45,7 @@ describe "Broker Utility" do
     # Save the outgoing request
     request = @request_opts
     # Checks
-    my_subs = Nurego::Customer.me.subscriptions.data
+    my_subs = Nurego::Customer.retrieve(@uaa_user_id).subscriptions.data
     expect(my_subs.any? { |subscription| subscription.id == sub.id }).to be_true
     expect(request[:method]).to eq :post
     expect(request[:url]).to eq "#{Nurego.api_base}/v1/organizations/#{ provision_params['organization_guid'] }/subscriptions"
@@ -68,18 +68,18 @@ describe "Broker Utility" do
         'instance_id' => @test_instance_id,
         'plan_id' => Nurego::Offering.current.plans.data[1].id
     }
-    orig_subs = Nurego::Customer.me.subscriptions.data
+    orig_subs = Nurego::Customer.retrieve(@uaa_user_id).subscriptions.data
     # call the BrokerUtility
     sub = Nurego::Cf::BrokerUtility.update(update_params)
     # Save the outgoing request
     request = @request_opts
     # Checks
-    my_subs = Nurego::Customer.me.subscriptions.data
+    my_subs = Nurego::Customer.retrieve(@uaa_user_id).subscriptions.data
     expect(my_subs.any? { |subscription| subscription.id == sub.id }).to be_true
     expect(orig_subs.any? { |subscription| subscription.id == sub.id }).to be_false
     expect(my_subs.find{|item| item.id == sub.id}.plan.id).to eq update_params['plan_id']
     expect(request[:method]).to eq :put
-    expect(request[:url]).to eq "#{Nurego.api_base}/v1/organizations/#{ Nurego::Customer.me.organization.id }/subscriptions/#{ orig_subs.find{|item| !my_subs.any?{|item2| item2.id == item.id}}.id }"
+    expect(request[:url]).to eq "#{Nurego.api_base}/v1/organizations/#{ Nurego::Customer.retrieve(@uaa_user_id).organization.id }/subscriptions/#{ orig_subs.find{|item| !my_subs.any?{|item2| item2.id == item.id}}.id }"
     payload = Nurego::JSON.load(request[:payload])
     # expect(payload['external_subscription_id']).to eq "#{ provision_params['instance_id'] }"
     expect(payload['provider']).to eq 'cloud-foundry'
@@ -101,20 +101,20 @@ describe "Broker Utility" do
         'plan_id' => Nurego::Offering.current.plans.data[0].id,
         'service_id' => 'Some_service_id'
     }
-    orig_subs = Nurego::Customer.me.subscriptions.data
+    orig_subs = Nurego::Customer.retrieve(@uaa_user_id).subscriptions.data
     sub_id = Nurego::Subscription.retrieve(@test_instance_id).id
     # call the BrokerUtility
     sub = Nurego::Cf::BrokerUtility.deprovision(deprovision_params)
     # Save the outgoing request
     request = @request_opts
     # Checks
-    my_subs = Nurego::Customer.me.subscriptions.data
+    my_subs = Nurego::Customer.retrieve(@uaa_user_id).subscriptions.data
     expect(my_subs.any? { |subscription| subscription.id == sub_id }).to be_false
     expect(orig_subs.any? { |subscription| subscription.id == sub_id }).to be_true
     expect(orig_subs.find{|item| !my_subs.any?{|item2| item2.id == item.id}}.id).to eq sub_id
     expect(request[:method]).to eq :delete
     url = request[:url].split('?')
-    expect(url[0]).to eq "#{Nurego.api_base}/v1/organizations/#{ Nurego::Customer.me.organization.id }/subscriptions/#{ sub_id }"
+    expect(url[0]).to eq "#{Nurego.api_base}/v1/organizations/#{ Nurego::Customer.retrieve(@uaa_user_id).organization.id }/subscriptions/#{ sub_id }"
     payload = {}
     url[1].split('&').each {|item| key,value = item.split('='); payload[key] = value;}
     expect(payload['provider']).to eq 'cloud-foundry'

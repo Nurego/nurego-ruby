@@ -13,19 +13,19 @@ describe "Subscriptions" do
 
   it "can create a subscription" do
     plan = Nurego::Offering.current.plans.first
-    organization = Nurego::Customer.me.organization
-    current_subscriptions = Nurego::Customer.me.subscriptions.data
+    organization = Nurego::Customer.retrieve(@uaa_user_id).organization
+    current_subscriptions = Nurego::Customer.retrieve(@uaa_user_id).subscriptions.data
     sub = create_subscription(organization, plan)
     expect(sub).to be_a_kind_of(Nurego::Subscription)
     expect(sub.plan_id).to eq plan.id
     expect(sub.organization_id).to eq organization.id
-    expect(Nurego::Customer.me.subscriptions.data.count).to eq current_subscriptions.count+1
-    expect(Nurego::Customer.me.subscriptions.data.any? { |subscription| subscription.id == sub.id }).to be_true
+    expect(Nurego::Customer.retrieve(@uaa_user_id).subscriptions.data.count).to eq current_subscriptions.count+1
+    expect(Nurego::Customer.retrieve(@uaa_user_id).subscriptions.data.any? { |subscription| subscription.id == sub.id }).to be_true
   end
 
   it "can retrieve a subscription" do
     plan = Nurego::Offering.current.plans.first
-    organization = Nurego::Customer.me.organization
+    organization = Nurego::Customer.retrieve(@uaa_user_id).organization
     sub = create_subscription(organization, plan)
     sub2 = Nurego::Subscription.retrieve(sub.id)
     expect(sub2.id).to eq(sub.id)
@@ -36,7 +36,7 @@ describe "Subscriptions" do
 
   it "can update a subscription" do
     plan = Nurego::Offering.current.plans.first
-    organization = Nurego::Customer.me.organization
+    organization = Nurego::Customer.retrieve(@uaa_user_id).organization
     sub = create_subscription(organization, plan)
     expect(Nurego::Offering.current.plans.data[1]).not_to be_nil
     plan2 = Nurego::Offering.current.plans.data[1].id
@@ -48,7 +48,7 @@ describe "Subscriptions" do
 
   it "can delete a subscription" do
     plan = Nurego::Offering.current.plans.first
-    organization = Nurego::Customer.me.organization
+    organization = Nurego::Customer.retrieve(@uaa_user_id).organization
     sub = create_subscription(organization, plan)
     id = sub.id
     now = Time.now
