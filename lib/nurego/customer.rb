@@ -4,7 +4,7 @@ module Nurego
 
     def self.me(api_key = nil)
       response, api_key = Nurego.request(:get, me_url, api_key)
-      Util.convert_to_nurego_object(response, api_key)
+      Util.convert_to_nurego_object(response, api_key).data[0]
     end
 
     def organization
@@ -12,7 +12,8 @@ module Nurego
     end
 
     def self.me_url
-      '/v1/customers/me'
+      decoded_token = CF::UAA::TokenCoder.new(verify: false).decode(Nurego::Auth.header_token[:token])
+      "/v1/customers/#{decoded_token['user_id']}"
     end
 
 =begin

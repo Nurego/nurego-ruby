@@ -2,7 +2,7 @@ require 'uuidtools'
 require_relative "../../lib/nurego"
 
 EXAMPLE_EMAIL = "integration.test+#{UUIDTools::UUID.random_create.to_s}@openskymarkets.com"
-EXAMPLE_PASSWORD = "password"
+EXAMPLE_PASSWORD = "Passw0rd"
 SERVICE_ID = 'nurego'#"197f9207-7325-4d75-983a-116b43fb9cc8"
 
 def setup_nurego_lib(no_register = false, public_key = false)
@@ -19,7 +19,7 @@ end
 def setup_login_and_login(no_login = false)
   Nurego::Auth.client_id = "portal"
   Nurego::Auth.client_secret = ENV['PORTALSECRET'] || "portalsecret"
-  Nurego::Auth.provider_site = ENV['UAA_URL'] || "http://localhost:8080/uaa"
+  Nurego::Auth.provider_site = ENV['UAA_URL'] || "http://localhost:8080"
 
   Nurego::Auth.login(EXAMPLE_EMAIL, EXAMPLE_PASSWORD) unless no_login
 end
@@ -28,7 +28,7 @@ def register
   return if ENV['CUSTOMER_SET'] == "yes"
 
   Nurego::Auth.logout
-  registration = Nurego::Registration.create({email: EXAMPLE_EMAIL})
+  registration = Nurego::Registration.create({email: EXAMPLE_EMAIL, service_id: SERVICE_ID})
   customer = registration.complete(id: registration.id, password: EXAMPLE_PASSWORD)
   ENV['CUSTOMER_SET'] = (customer["email"] == EXAMPLE_EMAIL && customer["object"] == "customer") ? "yes" : "no"
 end
