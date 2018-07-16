@@ -57,7 +57,7 @@ module Nurego
                                           'Please also make sure you set "Nurego.client_secret = <client secret>". ' +
                                           'See https://www.nurego.com/api for details, or email support@nurego.com ' +
                                           'if you have any questions.') if e.message == "status 401" || e.is_a?(CF::UAA::TargetError)
-        raise NuregoError "fetch_access_info #{e.inspect}"
+        raise NuregoError.new("fetch_access_info #{e.inspect}")
       end
 
       def fetch_admin_access_token

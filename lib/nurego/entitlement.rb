@@ -24,11 +24,6 @@ module Nurego
       Util.convert_to_nurego_object(response, api_key)
     end
 
-    def self.all_by_organization(organization_id, filters={}, api_key=nil)
-      response, api_key = Nurego.request(:get, "/v1/organizations/#{organization_id}/entitlements", api_key, filters)
-      Util.convert_to_nurego_object(response, api_key)
-    end
-
 private
       def structure_sensitive_mimic_to_query(array, key)
         prefix = "#{key}[]"
