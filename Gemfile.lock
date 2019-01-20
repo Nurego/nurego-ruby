@@ -2,7 +2,7 @@ PATH
   remote: .
   specs:
     nurego (1.1.22)
-      cf-uaa-lib (= 1.3.10)
+      cf-uaa-lib (~> 3.6.0)
       mime-types (~> 1.25)
       multi_json (>= 1.0.4, < 2)
       rest-client (~> 1.4)
@@ -11,7 +11,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     builder (3.2.2)
-    cf-uaa-lib (1.3.10)
+    cf-uaa-lib (~> 3.6.0)
       multi_json
     ci_reporter (1.9.2)
       builder (>= 2.1.2)
