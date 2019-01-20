@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    nurego (1.1.22)
+    nurego (1.1.23)
       cf-uaa-lib (~> 3.6.0)
       mime-types (~> 1.25)
       multi_json (>= 1.0.4, < 2)
